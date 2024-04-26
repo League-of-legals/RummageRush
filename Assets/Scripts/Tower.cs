@@ -24,14 +24,14 @@ public class Tower : MonoBehaviour
     [SerializeField] float firingTimer;
     [SerializeField] public float firingDelay = 1.0f;
 
-    float scanningTimer;
+    public float towerScanningTimer;
     float scanningDelay = 0.1f;
 
     // Enemy bookkeeping
     [SerializeField] LayerMask enemyLayers;
     [SerializeField] Collider[] colliders;
     [SerializeField] List<Enemy> enemiesInRange;
-    [SerializeField] Enemy targetedEnemy;
+    [SerializeField] public Enemy targetedEnemy;
 
     [SerializeField] TowerHealthBar towerHealthBar;
 
@@ -42,6 +42,10 @@ public class Tower : MonoBehaviour
 
     [SerializeField] ExplosionEffect effectCanvas;
 
+    [SerializeField] Animator animator;
+    [SerializeField] Transform raccoon;
+
+    [SerializeField] EventManagerSO eventManager;
 
     private void Awake()
     {
@@ -64,6 +68,11 @@ public class Tower : MonoBehaviour
 
     }
 
+    private void Start()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
+
 
     private void Update()
     {
@@ -73,14 +82,15 @@ public class Tower : MonoBehaviour
             if (towerIsActive)
             {
 
+
                 towerHealthBar.UpdateTowerHealthBar(currentTowerHealth, towerHealth);
 
                 // == SCANNING PART ==
 
-                scanningTimer += Time.deltaTime;
-                if (scanningTimer >= scanningDelay)
+                towerScanningTimer += Time.deltaTime;
+                if (towerScanningTimer >= scanningDelay)
                 {
-                    scanningTimer = 0;   // reset scanning timer
+                    towerScanningTimer = 0;   // reset scanning timer
                     if (targetedEnemy == null)
                     {
                         ScanForEnemies();    // call the scan function
@@ -92,14 +102,20 @@ public class Tower : MonoBehaviour
 
                 // if there's a targeted enemy, then increment the timer every frame
                 if (targetedEnemy)
+                {
+                    raccoon = this.gameObject.transform.GetChild(0);
+                    raccoon.LookAt(targetedEnemy.transform.position);
+
                     firingTimer += Time.deltaTime;
 
-                // if we have reached the firingDelay, then reset the timer and fire
-                if (firingTimer >= firingDelay)
-                {
-                    firingTimer = 0f;
-                    Fire();            // call the fire function
 
+                    // if we have reached the firingDelay, then reset the timer and fire
+                    if (firingTimer >= firingDelay)
+                    {
+                        firingTimer = 0f;
+                        Fire();            // call the fire function
+
+                    }
                 }
 
 
@@ -138,6 +154,8 @@ public class Tower : MonoBehaviour
         // make sure there is something to shoot at
         if (targetedEnemy != null)
         {
+
+            
             // get enemy direction relative to the tower
             Vector3 enemyDirection
                 = (targetedEnemy.transform.position - firingPoint.position).normalized;
@@ -181,6 +199,7 @@ public class Tower : MonoBehaviour
 
         }
     }
+
 
     //public Transform GetTargetPoint()
     //{

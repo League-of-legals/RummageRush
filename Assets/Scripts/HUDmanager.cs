@@ -16,6 +16,7 @@ public class HUDmanager : MonoBehaviour
     [SerializeField] Tower towerDefault;
     [SerializeField] Tower towerFast;
     [SerializeField] Tower towerHeavy;
+    private Enemy enemy;
 
     [SerializeField] GameObject gameOverScreen;
     [SerializeField] GameObject tutorialScreen;
@@ -145,8 +146,8 @@ public class HUDmanager : MonoBehaviour
     }
 
     public void UpdateMoneyText()
-    { 
-        moneyTextObject.text = $"x {gameSettings.money}";
+    {
+                moneyTextObject.text = $"x {gameSettings.money}";
     }
 
     public void SubtractTowerCost()

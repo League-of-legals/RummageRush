@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff8a7aee229ac6a43b77c11efdc2749b, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  money: 5
-  damageDealt: 0
-  currentGameState: 7
-  previousGameState: 1
+  money: 0
+  damageDealt: 30
+  currentGameState: 1
+  previousGameState: 2
+  eventManager: {fileID: 11400000, guid: 460f86889e4558c4794133662cbd2532, type: 2}
+  enemy: {fileID: 0}
   enemiesSpawned: 7
-  enemiesDestroyed: 3
+  enemiesDestroyed: 0

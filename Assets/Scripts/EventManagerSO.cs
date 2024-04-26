@@ -16,12 +16,24 @@ public class EventManagerSO : ScriptableObject
     public event Action onRandomEvent;
     public event Action onWin;
 
+    public event Action onRandomEventTowers;
+
+    public event Action onRandomEventStop;
 
     public void RandomEvent()
     {
         onRandomEvent?.Invoke();
     }
 
+    public void RandomEventStop()
+    {
+        onRandomEventStop?.Invoke();
+    }
+
+    public void RandomEventTowers()
+    {
+        onRandomEventTowers?.Invoke();
+    }
     public void EnemyDestroyed()
     { onEnemyDestroyed?.Invoke(); }
     public void PauseGame()

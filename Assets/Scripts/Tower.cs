@@ -40,6 +40,9 @@ public class Tower : MonoBehaviour
 
     [SerializeField] List<EnemySlot> enemySlots;
 
+    [SerializeField] ExplosionEffect effectCanvas;
+
+
     private void Awake()
     {
         // initial setup
@@ -52,6 +55,12 @@ public class Tower : MonoBehaviour
                 foreach (Transform slot in t)
                     enemySlots.Add(new EnemySlot(slot));
         firingDelay = defaultFiringDelay;
+
+        //ExplosionEffect[] children = GetComponentsInChildren <ExplosionEffect>();
+        //foreach (ExplosionEffect effectCanvas in children)
+        //{
+        //    effectCanvas.gameObject.SetActive(true);
+        //}
 
     }
 
@@ -159,9 +168,14 @@ public class Tower : MonoBehaviour
     {
         {
             currentTowerHealth -= enemyDamage;
-
+            
             if (currentTowerHealth <= 0)
             {
+                Instantiate(
+                    effectCanvas,
+                    new Vector3(transform.position.x, transform.position.y + 1, transform.position.z - 1),
+                    Quaternion.identity);
+
                 Destroy(this.gameObject);
             }
 
@@ -204,6 +218,7 @@ public class Tower : MonoBehaviour
         transform = null;
         return false;
     }
+
 
 
 

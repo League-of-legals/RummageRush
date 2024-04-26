@@ -1647,6 +1647,8 @@ MonoBehaviour:
   towerHealthBar: {fileID: 7595107189129977134}
   gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
   enemySlots: []
+  effectCanvas: {fileID: 4540057613527559244, guid: 1f9832cb3ff3ce544afcbc6c88e77fa7,
+    type: 3}
 --- !u!65 &9046594676099576813
 BoxCollider:
   m_ObjectHideFlags: 0

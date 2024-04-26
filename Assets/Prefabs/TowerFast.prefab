@@ -1471,11 +1471,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7101842420747140705}
   - {fileID: 5975308330080153838}
   - {fileID: 4476531131706815918}
   - {fileID: 4779967575793675343}
   - {fileID: 4365547609833661159}
-  - {fileID: 7101842420747140705}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7792919146501810276
@@ -1512,6 +1512,9 @@ MonoBehaviour:
   enemySlots: []
   effectCanvas: {fileID: 4540057613527559244, guid: 1f9832cb3ff3ce544afcbc6c88e77fa7,
     type: 3}
+  animator: {fileID: 0}
+  raccoon: {fileID: 0}
+  eventManager: {fileID: 11400000, guid: 460f86889e4558c4794133662cbd2532, type: 2}
 --- !u!65 &9046594676099576813
 BoxCollider:
   m_ObjectHideFlags: 0

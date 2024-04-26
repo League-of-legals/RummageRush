@@ -5,14 +5,13 @@ using UnityEngine;
 public class ExplosionEffect : MonoBehaviour
 {
 
-    // Update is called once per frame
     void Update()
     {
         StartCoroutine(Lifetime());
     }
     IEnumerator Lifetime()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.7f);
         Destroy(this.gameObject);
     }
 }

@@ -35,7 +35,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public float enemyDamage = 5f;
 
     //drop reward
-    [SerializeField] float rewardCost = 30f;
+    [SerializeField] public float rewardCost = 30f;
  
     //damage timers
     [SerializeField] float damageDealingTimer;
@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
 
     // health
     [SerializeField] public float maxHealth;
-    [SerializeField] public float currentHealth;
+    [SerializeField] private float currentHealth;
     [SerializeField] HealthBar healthBar;
 
     //tower bookkeping
@@ -61,7 +61,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] GameSettingsSO gameSettings;
     [SerializeField] EventManagerSO eventManager;
-
+    [SerializeField] Animator animator;
 
 
     // remember where to go
@@ -77,10 +77,15 @@ public class Enemy : MonoBehaviour
         enemyState = EnemyState.Traveling;
     }
 
+    private void Start()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
     private void Update()
     {
         if (gameSettings.currentGameState == GameStates.inGame)
         {
+            animator.SetTrigger("walk");
             switch (enemyState)
             { 
             case EnemyState.Stopped:
@@ -170,6 +175,8 @@ public class Enemy : MonoBehaviour
                 {
                     if (targetedTower != null && targetedTower.towerIsActive)
                     {
+                            animator.ResetTrigger("walk");
+                            animator.SetTrigger("punch");
                         foreach (Collider tower in colliders)
                         {
                             damageDealingTimer += Time.deltaTime;
@@ -211,15 +218,10 @@ public class Enemy : MonoBehaviour
         if (currentHealth <= 0)
         {
 
-            gameSettings.money += rewardCost;
-            gameSettings.enemiesDestroyed++;
-            eventManager.EnemyDestroyed();
-            Destroy(this.gameObject);
+            
+            StartCoroutine(DeathSequence());
 
-            if (gameSettings.enemiesDestroyed == gameSettings.enemiesSpawned)
-            {
-                eventManager.Win();
-            }
+
 
         }
     }
@@ -246,6 +248,18 @@ public class Enemy : MonoBehaviour
         }
 
 
+    }
+
+    IEnumerator DeathSequence()
+    {
+        animator.ResetTrigger("walk");
+        animator.ResetTrigger("punch");
+        animator.SetTrigger("die");
+
+        yield return new WaitForSeconds(3.5f);
+        gameSettings.money += rewardCost;
+        eventManager.EnemyDestroyed();
+        Destroy(this.gameObject);
     }
 
 }

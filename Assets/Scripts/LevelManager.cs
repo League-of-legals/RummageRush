@@ -27,6 +27,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] Enemy enemyDefault;
     [SerializeField] Enemy enemyFast;
     [SerializeField] Enemy enemyHeavy;
+    public Enemy enemy;
 
     [SerializeField] Enemy[] enemiesInTheScene;
     [SerializeField] Tower[] towersInTheScene;
@@ -61,6 +62,16 @@ public class LevelManager : MonoBehaviour
         
     }
 
+    private void OnEnable()
+    {
+        eventManager.onEnemyDestroyed += UpdateKillCount;
+    }
+
+    private void OnDisable()
+    {
+        eventManager.onEnemyDestroyed -= UpdateKillCount;
+    }
+
     private void Update()
     {
         FindEnemiesInTheScene();
@@ -76,6 +87,10 @@ public class LevelManager : MonoBehaviour
             }
         }
 
+        if (gameSettings.enemiesDestroyed == gameSettings.enemiesSpawned)
+        {
+            eventManager.Win();
+        }
 
 
         if (gameSettings.currentGameState== GameStates.inTutorial)
@@ -123,7 +138,7 @@ public class LevelManager : MonoBehaviour
 
         if (gameSettings.currentGameState == GameStates.inGame)
         {
-            if (gameSettings.damageDealt == 30f)
+            if (gameSettings.damageDealt == 60f)
             {
                 randomEvent.item = null;
                 randomEvent.itemName = null;
@@ -227,7 +242,7 @@ public class LevelManager : MonoBehaviour
                     foreach (Enemy enemy in enemiesInTheScene)
                     {
                         enemy.maxHealth = 5f;
-                        enemy.currentHealth = 5f;
+
                     }
                         
                     
@@ -271,9 +286,16 @@ public class LevelManager : MonoBehaviour
 
 
         }
+
                     
          
     }
+
+    private void UpdateKillCount()
+    {
+        gameSettings.enemiesDestroyed += 1;
+    }
+
 
 
     private void FindEnemiesInTheScene()

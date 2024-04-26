@@ -14,6 +14,8 @@ public class GameSettingsSO : ScriptableObject
 
     [SerializeField] public GameStates currentGameState;
     [SerializeField] public GameStates previousGameState;
+    [SerializeField] EventManagerSO eventManager;
+    public Enemy enemy;
 
     public int enemiesSpawned = 0;
     public int enemiesDestroyed = 0;
@@ -28,6 +30,8 @@ public class GameSettingsSO : ScriptableObject
     }
 
 
+
+
     public void ResetMoney()
     {
         money = 30f;
@@ -37,5 +41,7 @@ public class GameSettingsSO : ScriptableObject
     {
         damageDealt = 0f;
     }
+
+
 
 }

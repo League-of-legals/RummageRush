@@ -632,7 +632,7 @@ MonoBehaviour:
   defaultHealth: 10
   speed: 4
   enemyDamage: 5
-  rewardCost: 20
+  rewardCost: 30
   damageDealingTimer: 0
   damageDealingDelay: 2
   enemyPath: {fileID: 0}
@@ -650,6 +650,7 @@ MonoBehaviour:
   towerHealthBar: {fileID: 0}
   gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
   eventManager: {fileID: 11400000, guid: 460f86889e4558c4794133662cbd2532, type: 2}
+  animator: {fileID: 0}
 --- !u!136 &99367023899445291
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
     private EnemyState enemyState;
 
     private Transform enemySlotAroundTower;
+    private Transform enemySlotAroundHomebase;
 
     //default values or reset values
     [SerializeField] public float defaultSpeed;
@@ -64,6 +65,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] EventManagerSO eventManager;
     [SerializeField] Animator animator;
 
+    [SerializeField] Homebase homebase;
 
     // remember where to go
     private int currentTargetWaypoint;
@@ -81,6 +83,7 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
+        homebase = FindFirstObjectByType<Homebase>();
     }
     private void Update()
     {
@@ -153,13 +156,19 @@ public class Enemy : MonoBehaviour
                     currentTargetWaypoint++;
                 }
 
-                //else if (Vector3.Distance(transform.position, enemyPath.GetWaypoint(currentTargetWaypoint).position) < 0.2f
-                //    && currentTargetWaypoint == 10)
-                //{
-                //    animator.ResetTrigger("walk");
-                //    animator.SetTrigger("punch");
-                //}
+                if (Vector3.Distance(transform.position, enemyPath.GetWaypoint(currentTargetWaypoint).position) < 0.2f
+                    && currentTargetWaypoint == 10)
+                {
+                    if (homebase)
+                    {
+                        enemyState = EnemyState.MovingToAttack; break;
 
+
+                    }
+
+
+                }
+               
                 ScanForTower();
 
                 if (targetedTower && targetedTower.towerIsActive)
@@ -192,13 +201,36 @@ public class Enemy : MonoBehaviour
 
                     if (Vector3.Distance(transform.position,
                         enemySlotAroundTower.transform.position) < 0.1f)
-                    {
-                        
+                    {                    
                         enemyState = EnemyState.Attacking;
                     }
                     break;
                 }
 
+                if (homebase)
+                {
+                    animator.ResetTrigger("walk");
+                    animator.SetTrigger("punch");
+
+                    if (!enemySlotAroundHomebase)
+                    {
+                        if (homebase.GetEnemySlotHomebase(this, out Transform slotTransform))
+                        {
+                            enemySlotAroundHomebase = slotTransform;
+                        }
+                    }
+                    transform.LookAt(homebase.transform.position);
+                    transform.position = Vector3.MoveTowards(
+                    transform.position,                                   // where from
+                    enemySlotAroundHomebase.transform.position,          // where to
+                    speed * Time.deltaTime                              // how fast
+                    );
+                    ScanForTower();
+
+                    if (targetedTower && targetedTower.towerIsActive)
+                        enemyState = EnemyState.MovingToAttack;
+                    break; 
+                }
                 // Nothing to do, go back to travelling
                 enemyState = EnemyState.Traveling;
                 break;
@@ -220,7 +252,7 @@ public class Enemy : MonoBehaviour
                         damageDealingTimer = 0;
                         targetedTower.TakeDamage(enemyDamage);
                     }
-                    break;
+                    
                 }
 
                 // Nothing to do, go back to travelling

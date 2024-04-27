@@ -814,7 +814,7 @@ Transform:
   m_GameObject: {fileID: 5570999033267619203}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.167, z: 0}
+  m_LocalPosition: {x: 0, y: 1.966, z: 0.274}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1495,7 +1495,7 @@ MonoBehaviour:
   towerHealth: 10
   currentTowerHealth: 0
   range: 8
-  projectile: {fileID: 2355240802375707062, guid: 230b486145416cd418abc1df10fcc74c,
+  projectile: {fileID: 2355240802375707062, guid: d21cc7599f6134f4db6e186637149eab,
     type: 3}
   firingPoint: {fileID: 4779967575793675343}
   towerIsActive: 0

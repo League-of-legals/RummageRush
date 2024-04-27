@@ -85,11 +85,14 @@ public class Enemy : MonoBehaviour
     {
         if (gameSettings.currentGameState == GameStates.inGame)
         {
+            animator.ResetTrigger("punch");
             animator.SetTrigger("walk");
             switch (enemyState)
             { 
-            case EnemyState.Stopped:
+                case EnemyState.Stopped:
                 {
+                        animator.ResetTrigger("walk");
+                        animator.SetTrigger("punch");
 
                     ScanForTower();
 
@@ -99,7 +102,7 @@ public class Enemy : MonoBehaviour
                     break;
                 }
 
-            case EnemyState.Traveling:
+                case EnemyState.Traveling:
                 {
                     if (currentTargetWaypoint >= enemyPath.GetNumberOfWaypoints())
                     {
@@ -132,7 +135,7 @@ public class Enemy : MonoBehaviour
                 }
 
 
-            case EnemyState.MovingToAttack:
+                case EnemyState.MovingToAttack:
                     {
                         if (targetedTower != null && targetedTower.towerIsActive)
                         {
@@ -169,9 +172,9 @@ public class Enemy : MonoBehaviour
 
                         // Nothing to do, go back to travelling
                         enemyState = EnemyState.Traveling; break;
-                }
+                    }
 
-            case EnemyState.Attacking:
+                case EnemyState.Attacking:
                 {
                     if (targetedTower != null && targetedTower.towerIsActive)
                     {
@@ -183,7 +186,7 @@ public class Enemy : MonoBehaviour
                             if (damageDealingTimer >= damageDealingDelay)
                             {
                                 damageDealingTimer = 0;
-                                targetedTower.TakeDamage(enemyDamage);
+                                targetedTower.TakeDamage(enemyDamage); 
                             }
                         }
                         break;

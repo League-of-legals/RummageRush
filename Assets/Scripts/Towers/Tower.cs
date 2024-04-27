@@ -183,8 +183,7 @@ public class Tower : MonoBehaviour
     }
 
     public void TakeDamage(float enemyDamage)
-    {
-        {
+    {      
             currentTowerHealth -= enemyDamage;
             
             if (currentTowerHealth <= 0)
@@ -195,9 +194,7 @@ public class Tower : MonoBehaviour
                     Quaternion.identity);
 
                 Destroy(this.gameObject);
-            }
-
-        }
+            }        
     }
 
 

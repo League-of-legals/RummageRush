@@ -12,7 +12,6 @@ public class HUDmanager : MonoBehaviour
 
     [SerializeField] GameSettingsSO gameSettings;
 
-    [SerializeField] Tower tower;
     [SerializeField] Tower towerDefault;
     [SerializeField] Tower towerFast;
     [SerializeField] Tower towerHeavy;
@@ -22,7 +21,7 @@ public class HUDmanager : MonoBehaviour
     [SerializeField] GameObject tutorialScreen;
     [SerializeField] GameObject pauseScreen;
     [SerializeField] GameObject controlsScreen;
-    [SerializeField] GameObject randomEventScreen;
+    [SerializeField] public GameObject randomEventScreen;
     [SerializeField] GameObject winScreen;
 
     [SerializeField] EventManagerSO eventManager;
@@ -147,14 +146,14 @@ public class HUDmanager : MonoBehaviour
 
     public void UpdateMoneyText()
     {
-                moneyTextObject.text = $"x {gameSettings.money}";
-    }
-
-    public void SubtractTowerCost()
-    {
-        gameSettings.money -= tower.towerCost;
         moneyTextObject.text = $"x {gameSettings.money}";
     }
+
+    //public void SubtractTowerCost()
+    //{
+    //    gameSettings.money -= tower.towerCost;
+    //    moneyTextObject.text = $"x {gameSettings.money}";
+    //}
 
     public void DisplayGameOverScreen()
     {

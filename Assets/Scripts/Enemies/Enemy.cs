@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public float speed;
 
     //range
-    float range = 2.0f;
+    float range = 3.0f;
 
     //damage
     [SerializeField] public float enemyDamage = 5f;
@@ -153,6 +153,13 @@ public class Enemy : MonoBehaviour
                     currentTargetWaypoint++;
                 }
 
+                //else if (Vector3.Distance(transform.position, enemyPath.GetWaypoint(currentTargetWaypoint).position) < 0.2f
+                //    && currentTargetWaypoint == 10)
+                //{
+                //    animator.ResetTrigger("walk");
+                //    animator.SetTrigger("punch");
+                //}
+
                 ScanForTower();
 
                 if (targetedTower && targetedTower.towerIsActive)
@@ -199,10 +206,11 @@ public class Enemy : MonoBehaviour
             case EnemyState.Attacking:
                 if (targetedTower && targetedTower.towerIsActive)
                 {
+                    transform.LookAt(targetedTower.transform);
                     animator.ResetTrigger("walk");
                     animator.ResetTrigger("stopped");
                     animator.SetTrigger("punch");
-                    foreach (Collider tower in colliders)
+                    foreach (Collider collider in colliders)
                     {
                         damageDealingTimer += Time.deltaTime;
                         if (damageDealingTimer < damageDealingDelay)

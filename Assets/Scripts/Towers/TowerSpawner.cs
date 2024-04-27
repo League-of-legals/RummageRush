@@ -78,7 +78,7 @@ public class TowerSpawner : MonoBehaviour
             }
 
             // place the tower
-            if (spawnerIsActive)
+            if (spawnerIsActive && hudManager.randomEventScreen.activeInHierarchy == false)
             {
                 towerIndicator.transform.position = GetMousePosition();
 
@@ -94,6 +94,8 @@ public class TowerSpawner : MonoBehaviour
                 // cancel placement
                 else if (Input.GetMouseButton(1))
                 {
+                    gameSettings.money += towerIndicator.towerCost;
+                    hudManager.UpdateMoneyText();
                     Destroy(towerIndicator.gameObject);
                     spawnerIsActive = false;
                 }
@@ -153,7 +155,8 @@ public class TowerSpawner : MonoBehaviour
 
             towerIndicator = Instantiate(newTower, mousePosition, Quaternion.identity);
             spawnerIsActive = true;
-            hudManager.SubtractTowerCost();
+            gameSettings.money -= newTower.towerCost;
+            hudManager.UpdateMoneyText();
         }
 
         else

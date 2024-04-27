@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.ProBuilder.MeshOperations;
@@ -65,8 +66,8 @@ public class Enemy : MonoBehaviour
 
 
     // remember where to go
-    private int currentTargetWaypoint = 0;
-
+    private int currentTargetWaypoint;
+    private float currentTime;
 
     private void Awake()
     {
@@ -83,134 +84,152 @@ public class Enemy : MonoBehaviour
     }
     private void Update()
     {
-        if (gameSettings.currentGameState == GameStates.inGame)
+        // If we aren't in game, then update fails, and we don't do anything
+        if (gameSettings.currentGameState != GameStates.inGame)
         {
-            animator.ResetTrigger("punch");
-            animator.SetTrigger("walk");
-            switch (enemyState)
-            { 
-                case EnemyState.Stopped:
+            return;
+        }
+        
+        // Set animation state
+        animator.ResetTrigger("punch");
+        animator.ResetTrigger("stopped");
+        animator.SetTrigger("walk");
+
+        // switch on the current state of the enemy
+        switch (enemyState)
+        {
+            default:
+            case EnemyState.Stopped:
+                animator.ResetTrigger("walk");
+                animator.ResetTrigger("punch");
+                
+                // Regardless of actually attacking, if stopped, it will punch
+                animator.SetTrigger("stopped");
+
+                ScanForTower();
+
+                if (targetedTower && targetedTower.towerIsActive)
                 {
-                        animator.ResetTrigger("walk");
-                        animator.SetTrigger("punch");
+                    enemyState = EnemyState.MovingToAttack;
+                }
+                break;
 
-                    ScanForTower();
+            case EnemyState.Traveling:
+                // if (currentTargetWaypoint >= enemyPath.GetNumberOfWaypoints())
+                // {
+                    /* TODO: Fix waypoint issue with enemy, documented steps to reproduce below
+                     - Let the enemy go to our base
+                     - spawn tower behind them
+                     - they attack tower
+                     - stand still looking away from tower
+                     
+                     Potential issues:
+                     - No line of sight to base
+                     - Way points may no longer be targeted
+                     - Way point count may need to be tracked
+                     - Looks like EnemyPathB doesn't have 6-9 filled out, this might be the culprit.
+                    
+                     Bug found:
+                     - More than 10 way points reported back
+                    */
+                //     Debug.Log($"We stopped for no reason. Waypoint: {currentTargetWaypoint}");
+                //     enemyState = EnemyState.Stopped;
+                //     break;
+                // }
 
+                transform.LookAt(enemyPath.GetWaypoint(currentTargetWaypoint));
 
-                    if (targetedTower != null && targetedTower.towerIsActive)
-                        enemyState = EnemyState.MovingToAttack;
-                    break;
+                transform.position = Vector3.MoveTowards(
+                transform.position,                                    // where from
+                enemyPath.GetWaypoint(currentTargetWaypoint).position,  // where to
+                speed * Time.deltaTime                         // how fast
+                );
+
+                // are we close enough to the destination?
+                if (Vector3.Distance(transform.position, enemyPath.GetWaypoint(currentTargetWaypoint).position) < 0.1f
+                     && currentTargetWaypoint < 10) // we were getting more than 10 waypoints
+                {
+                    // increment the current target waypoint
+                    currentTargetWaypoint++;
                 }
 
-                case EnemyState.Traveling:
+                ScanForTower();
+
+                if (targetedTower && targetedTower.towerIsActive)
+                    enemyState = EnemyState.MovingToAttack;
+                break;
+            
+            case EnemyState.MovingToAttack:
+                if (targetedTower && targetedTower.towerIsActive)
                 {
-                    if (currentTargetWaypoint >= enemyPath.GetNumberOfWaypoints())
+                    if (!enemySlotAroundTower)
                     {
-                        enemyState = EnemyState.Stopped;
-
-                        break;
+                        if (targetedTower.GetEnemySlot(this, out Transform slotTransform))
+                        {
+                            enemySlotAroundTower = slotTransform;
+                        }
+                        else
+                        {
+                            // Cannot find a free slot around the tower
+                            // Getting out of here
+                            enemyState = EnemyState.Traveling; break;
+                        }
                     }
-
-                    transform.LookAt(enemyPath.GetWaypoint(currentTargetWaypoint));
-
+                    
+                    transform.LookAt(enemySlotAroundTower.transform.position);
                     transform.position = Vector3.MoveTowards(
-                    transform.position,                                    // where from
-                    enemyPath.GetWaypoint(currentTargetWaypoint).position,               // where to
-                    speed * Time.deltaTime                                 // how fast
+                    transform.position,                                   // where from
+                    enemySlotAroundTower.transform.position,               // where to
+                    speed * Time.deltaTime                        // how fast
                     );
 
-                    // are we close enough to the destination?
                     if (Vector3.Distance(transform.position,
-                    enemyPath.GetWaypoint(currentTargetWaypoint).position) < 0.1f)
+                        enemySlotAroundTower.transform.position) < 0.1f)
                     {
-                        // increment the current target waypoint
-                        currentTargetWaypoint++;
+                        
+                        enemyState = EnemyState.Attacking;
                     }
-
-                    ScanForTower();
-
-                    if (targetedTower != null && targetedTower.towerIsActive)
-                        enemyState = EnemyState.MovingToAttack;
                     break;
                 }
 
+                // Nothing to do, go back to travelling
+                enemyState = EnemyState.Traveling;
+                break;
 
-                case EnemyState.MovingToAttack:
-                    {
-                        if (targetedTower != null && targetedTower.towerIsActive)
-                        {
-                            if (!enemySlotAroundTower)
-                            {
-                                if (targetedTower.GetEnemySlot(this, out Transform slotTransform))
-                                {
-                                    enemySlotAroundTower = slotTransform;
-                                }
-                                else
-                                {
-                                    // Cannot find a free slot around the tower
-                                    // Getting out of here
-                                    enemyState = EnemyState.Traveling; break;
-                                }
-                            }
-
-
-                            transform.LookAt(enemySlotAroundTower.transform.position);
-                            transform.position = Vector3.MoveTowards(
-                            transform.position,                                    // where from
-                            enemySlotAroundTower.transform.position,               // where to
-                            speed * Time.deltaTime                                 // how fast
-                            );
-
-                            if (Vector3.Distance(transform.position,
-                                enemySlotAroundTower.transform.position) < 0.1f)
-                            {
-                                
-                                enemyState = EnemyState.Attacking; break;
-                            }
-                            break;
-                        }
-
-                        // Nothing to do, go back to travelling
-                        enemyState = EnemyState.Traveling; break;
-                    }
-
-                case EnemyState.Attacking:
+            case EnemyState.Attacking:
+                if (targetedTower && targetedTower.towerIsActive)
                 {
-                    if (targetedTower != null && targetedTower.towerIsActive)
+                    animator.ResetTrigger("walk");
+                    animator.ResetTrigger("stopped");
+                    animator.SetTrigger("punch");
+                    foreach (Collider tower in colliders)
                     {
-                            animator.ResetTrigger("walk");
-                            animator.SetTrigger("punch");
-                        foreach (Collider tower in colliders)
+                        damageDealingTimer += Time.deltaTime;
+                        if (damageDealingTimer < damageDealingDelay)
                         {
-                            damageDealingTimer += Time.deltaTime;
-                            if (damageDealingTimer >= damageDealingDelay)
-                            {
-                                damageDealingTimer = 0;
-                                targetedTower.TakeDamage(enemyDamage); 
-                            }
+                            return;
                         }
-                        break;
+                        damageDealingTimer = 0;
+                        targetedTower.TakeDamage(enemyDamage);
                     }
-
-                    // Nothing to do, go back to travelling
-                    enemyState = EnemyState.Traveling; break;
+                    break;
                 }
-            }
 
+                // Nothing to do, go back to travelling
+                enemyState = EnemyState.Traveling;
+                break;
         }
-
     }
 
-
-        // let the enemy know which path to follow
-        public void SetEnemyPath(EnemyPath incomingPath)
+    // let the enemy know which path to follow
+    public void SetEnemyPath(EnemyPath incomingPath)
     {
         enemyPath = incomingPath;
     }
 
     public void InflictDamage(float incomingDamage)
     {
-
+        Debug.Log("Got Hit");
         currentHealth -= incomingDamage;
         gameSettings.damageDealt += incomingDamage;
 
@@ -220,12 +239,7 @@ public class Enemy : MonoBehaviour
         // gg wp
         if (currentHealth <= 0)
         {
-
-            
             StartCoroutine(DeathSequence());
-
-
-
         }
     }
 
@@ -257,6 +271,7 @@ public class Enemy : MonoBehaviour
     {
         animator.ResetTrigger("walk");
         animator.ResetTrigger("punch");
+        animator.ResetTrigger("stopped");
         animator.SetTrigger("die");
 
         yield return new WaitForSeconds(3.5f);

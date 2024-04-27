@@ -1638,6 +1638,7 @@ MonoBehaviour:
   towerIsActive: 0
   firingTimer: 0
   firingDelay: 1
+  towerScanningTimer: 0
   enemyLayers:
     serializedVersion: 2
     m_Bits: 64
@@ -1671,8 +1672,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.70475364, z: 1}
-  m_Center: {x: 0, y: 0.3340327, z: 0}
+  m_Size: {x: 1, y: 1.697299, z: 1}
+  m_Center: {x: 0, y: 0.83030534, z: 0}
 --- !u!1 &9058589975720084838
 GameObject:
   m_ObjectHideFlags: 0

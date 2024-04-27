@@ -1492,7 +1492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultFiringDelay: 0.5
   towerCost: 30
-  towerHealth: 10
+  towerHealth: 30
   currentTowerHealth: 0
   range: 8
   projectile: {fileID: 2355240802375707062, guid: d21cc7599f6134f4db6e186637149eab,

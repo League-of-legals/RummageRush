@@ -313,7 +313,7 @@ public class Enemy : MonoBehaviour
         animator.ResetTrigger("punch");
         animator.ResetTrigger("stopped");
         animator.SetTrigger("die");
-
+        speed = 0f;
         yield return new WaitForSeconds(3.5f);
         gameSettings.money += rewardCost;
         eventManager.EnemyDestroyed();

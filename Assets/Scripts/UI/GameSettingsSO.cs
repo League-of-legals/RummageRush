@@ -8,7 +8,7 @@ using UnityEngine;
 public class GameSettingsSO : ScriptableObject
 {
 
-    public float money = 30f;
+    public float money = 45f;
 
     public float damageDealt = 0f;
 
@@ -34,7 +34,7 @@ public class GameSettingsSO : ScriptableObject
 
     public void ResetMoney()
     {
-        money = 30f;
+        money = 45f;
     }
 
     public void ResetDamageDealt()

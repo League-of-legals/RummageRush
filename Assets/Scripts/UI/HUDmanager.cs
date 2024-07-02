@@ -31,6 +31,7 @@ public class HUDmanager : MonoBehaviour
     [SerializeField] Button buttonControls;
     [SerializeField] Button buttonPause;
     [SerializeField] Button buttonCloseControls;
+    [SerializeField] Button buttonMute;
 
     [SerializeField] Button buttonResume;
 
@@ -38,6 +39,7 @@ public class HUDmanager : MonoBehaviour
     [SerializeField] TMP_Text towerFastCost;
     [SerializeField] TMP_Text towerHeavyCost;
 
+    [SerializeField] AudioScript audioScript;
 
     private void Start()
     {
@@ -64,6 +66,20 @@ public class HUDmanager : MonoBehaviour
         {
             randomEventScreen.SetActive(false);
         }
+
+        /*if (Input.GetKeyUp(KeyCode.M))
+        {
+            if (audioScript.audioSource.isPlaying)
+            {
+                audioScript.StopMusic();
+            }
+            if (!audioScript.audioSource.isPlaying)
+            {
+                audioScript.PlayMusic();
+            }
+        }
+*/
+
     }
 
 
@@ -95,6 +111,18 @@ public class HUDmanager : MonoBehaviour
             Time.timeScale = 1f;
         });
 
+        buttonMute.onClick.AddListener(() =>
+        {
+            if (audioScript.audioSource.isPlaying)
+            {
+                audioScript.StopMusic();
+            }
+            else 
+            {
+                audioScript.PlayMusic();
+            }
+        });
+
         //buttonExit.onClick.AddListener(() =>
         //{
         //    gameSettings.previousGameState = gameSettings.currentGameState;
@@ -116,6 +144,9 @@ public class HUDmanager : MonoBehaviour
         eventManager.onResumeGame += HidePauseScreen;
         eventManager.onEnemyDestroyed += UpdateMoneyText;
         eventManager.onRandomEvent += ShowRandomEventScreen;
+
+
+
 
     }
 

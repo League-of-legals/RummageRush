@@ -71,11 +71,24 @@ public class TowerSpawner : MonoBehaviour
                 StartTowerPlacement(towerHeavy);
             }
 
-            if (Input.GetKeyUp(KeyCode.Alpha1) && !spawnerIsActive && gameSettings.money == 0)
+            if (Input.GetKeyUp(KeyCode.Alpha1) && !spawnerIsActive && gameSettings.money <= towerDefault.towerCost)
             {
                 Debug.Log($"Not enough money!");
                 StartCoroutine(StatusUpdate());
             }
+
+            if (Input.GetKeyUp(KeyCode.Alpha2) && !spawnerIsActive && gameSettings.money <= towerFast.towerCost)
+            {
+                Debug.Log($"Not enough money!");
+                StartCoroutine(StatusUpdate());
+            }
+
+            if (Input.GetKeyUp(KeyCode.Alpha3) && !spawnerIsActive && gameSettings.money <= towerHeavy.towerCost)
+            {
+                Debug.Log($"Not enough money!");
+                StartCoroutine(StatusUpdate());
+            }
+
 
             // place the tower
             if (spawnerIsActive && hudManager.randomEventScreen.activeInHierarchy == false)

@@ -40,4 +40,9 @@ public class MainMenuManager : MonoBehaviour
       
     }
 
+    public void doExitGame()
+    {
+        Application.Quit();
+    }
+
 }

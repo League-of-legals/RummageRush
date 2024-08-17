@@ -78,6 +78,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   path: {fileID: 0}
+  gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
+  resourceGain: 80
 --- !u!1 &8470424603902127272
 GameObject:
   m_ObjectHideFlags: 0

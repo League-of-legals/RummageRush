@@ -165,7 +165,7 @@ public class TowerSpawner : MonoBehaviour
     {
         if (!spawnerIsActive && gameSettings.money >= newTower.towerCost)
         {
-
+            Debug.Log($"Purchased tower");
             towerIndicator = Instantiate(newTower, mousePosition, Quaternion.identity);
             spawnerIsActive = true;
             gameSettings.money -= newTower.towerCost;

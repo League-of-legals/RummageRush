@@ -37,10 +37,10 @@ public class LooterRaccoon : MonoBehaviour
             }
         }
 
-        if (Vector3.Distance(transform.position, path.GetWaypoint(currentTargetWaypoint).position) < 0.1f
-                && currentTargetWaypoint == numberOfWaypoints - 1f)
-        { 
-            StartCoroutine(DrawResource());        
+        if (Vector3.Distance(transform.position, path.GetWaypoint(currentTargetWaypoint).position) < 0.01f
+                && currentTargetWaypoint == numberOfWaypoints -1f && !hasLoot)
+        {
+            StartCoroutine(DrawResource());
         }
 
         if (hasLoot)
@@ -54,19 +54,21 @@ public class LooterRaccoon : MonoBehaviour
 
 
     }
-
+ IEnumerator DrawResource()
+    {
+        Debug.Log($"drawing resource");
+        yield return new WaitForSeconds(5f);
+        transform.position = Vector3.MoveTowards(transform.position, path.GetWaypoint(6).position,
+           speed * Time.deltaTime);
+        hasLoot = true;
+        gameSettings.money += resourceGain;
+    }
 
 
 
     public void SetLooterPath(LooterRaccoonPath incomingPath)
     { path = incomingPath; }
 
-    IEnumerator DrawResource()
-    {
-        yield return new WaitForSeconds(2f);
-        gameSettings.money += resourceGain;
-        hasLoot = true;
-
-    }
+   
 
 }

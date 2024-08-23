@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LooterRacoonSpawner : MonoBehaviour
 {
+
     [SerializeField] LooterRaccoon looterRaccoon;
 
     [SerializeField] List<LooterRaccoonPath> paths;
+
+    [SerializeField] Button buttonSpawn;
 
     private void SpawnLooter(LooterRaccoonPath chosenPath)
     {
@@ -17,4 +21,10 @@ public class LooterRacoonSpawner : MonoBehaviour
     {
         SpawnLooter(paths[(int)Random.Range(0, paths.Count)]);
     }
+
+    private void OnEnable()
+    {
+        buttonSpawn.onClick.AddListener(delegate { SpawnLooter(paths[(int)Random.Range(0, paths.Count)]); }) ;
+    }
+
 }

@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - ResourcePool
+  - Homebase
   layers:
   - Default
   - TransparentFX
@@ -16,9 +18,9 @@ TagManager:
   - Projectile
   - Ground
   - Tower
-  - 
-  - 
-  - 
+  - ResourcePool
+  - Looter
+  - Homebase
   - 
   - 
   - 

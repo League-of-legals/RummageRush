@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ResourceLoadIndicatorUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] TMP_Text resourceLoadText;
+    [SerializeField] LooterRaccoon looterRaccoon;
+
+    private void Start()
     {
-        
+        looterRaccoon = GetComponentInParent<LooterRaccoon>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateLoadText(string moneyText)
     {
-        
+        resourceLoadText.text = moneyText;
     }
 }

@@ -4,21 +4,26 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    /* ENEMY SPAWNER
-     * Spawns a wave of enemies to a chosen path 
-     */
+    // == ENEMY SPAWNER ==
+    // Spawns a wave of enemies to a chosen path 
 
     // == PATHS ==
     //[SerializeField] EnemyPath enemyPathA;
     //[SerializeField] EnemyPath enemyPathB;
 
     [SerializeField] List<EnemyPath> paths;
-    [SerializeField] public List<Enemy> enemies;
+
 
     // == ENEMIES ==
+    [SerializeField] public List<Enemy> enemies;
     [SerializeField] Enemy enemyDefault;
     [SerializeField] Enemy enemyFast;
     [SerializeField] Enemy enemyHeavy;
+
+    [SerializeField] Enemy newEnemy;
+
+    // == TOWER SPAWNER ==
+    [SerializeField] TowerSpawner towerSpawner;
 
     // == SETTINGS ==
     //[SerializeField] int wave01Enemies = 8;
@@ -32,13 +37,10 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnEnemy(Enemy enemyToSpawn, EnemyPath chosenPath)
     {
         // which enemy to spawn, where, what rotation, which path
-        Instantiate(enemyToSpawn, transform.position, Quaternion.identity).SetEnemyPath(chosenPath);
-        enemies.Add(enemyToSpawn);
-
-    }
-    private void Awake()
-    {
-
+        newEnemy = Instantiate(enemyToSpawn, transform.position, Quaternion.identity);
+        newEnemy.SetEnemyPath(chosenPath);      // set path for the enemy
+        newEnemy.towerSpawner = towerSpawner;   // get references for the tower spawner
+        enemies.Add(enemyToSpawn);              // add the enemy to the list of enemies
     }
 
     private void Start()

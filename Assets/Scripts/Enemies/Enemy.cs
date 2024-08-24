@@ -17,16 +17,19 @@ public class Enemy : MonoBehaviour
 
     private EnemyState enemyState;
 
+    // slots
     private Transform enemySlotAroundTower;
     private Transform enemySlotAroundHomebase;
+    private Transform enemySlotAroundLooter;
 
     //default values or reset values
+    [Header("Default values:")]
     [SerializeField] public float defaultSpeed;
 
     [SerializeField] public float defaultHealth;
 
 
-
+    [Header("Values:")]
     //speed
     [SerializeField] public float speed;
 
@@ -38,29 +41,42 @@ public class Enemy : MonoBehaviour
 
     //drop reward
     [SerializeField] public float rewardCost = 30f;
- 
+
     //damage timers
+    [Header("Damage timer:")]
     [SerializeField] float damageDealingTimer;
     [SerializeField] float damageDealingDelay = 2f;
 
+    [Header("Path:")]
     // get reference to the road
     [SerializeField] EnemyPath enemyPath;
-
+   [Header("Enemy targeting:")]
     // hit target (where to hit the enemy)
     [SerializeField] Transform hitTarget;
 
+    [Header("Health:")]
     // health
     [SerializeField] public float maxHealth;
     [SerializeField] private float currentHealth;
     [SerializeField] HealthBar healthBar;
 
+    [Header("Target bookkeeping:")]
+
+    [SerializeField] Collider[] colliders;
     //tower bookkeping
     [SerializeField] LayerMask towerLayers;
-    [SerializeField] Collider[] colliders;
     [SerializeField] List<Tower> towersInRange;
     [SerializeField] Tower targetedTower;
     [SerializeField] TowerHealthBar towerHealthBar;
 
+    //looter bookkeping
+    [SerializeField] LayerMask looterLayers;
+    [SerializeField] List<LooterRaccoon> looterRaccoonsInRange;
+    [SerializeField] LooterRaccoon targetedRaccoon;
+
+    [Header("Other references:")]
+    //other references
+   
     [SerializeField] GameSettingsSO gameSettings;
     [SerializeField] EventManagerSO eventManager;
     [SerializeField] Animator animator;
@@ -75,15 +91,16 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        //set max health
+        //set max health and values to default
         maxHealth = defaultHealth;
         currentHealth = maxHealth;
-        speed = defaultSpeed;
+        speed = defaultSpeed; 
         enemyState = EnemyState.Traveling;
     }
 
     private void Start()
     {
+        // get references
         animator = GetComponentInChildren<Animator>();
         homebase = FindFirstObjectByType<Homebase>();
     }
@@ -111,36 +128,43 @@ public class Enemy : MonoBehaviour
                 // Regardless of actually attacking, if stopped, it will punch
                 animator.SetTrigger("stopped");
 
-                ScanForTower();
+
+                if (towerSpawner.towersInScene)
+                { ScanForTower(); }
+                else { ScanForLooter(); }
 
                 if (targetedTower && targetedTower.towerIsActive)
                 {
                     enemyState = EnemyState.MovingToAttack;
                 }
+
+                if(targetedRaccoon)
+                { enemyState = EnemyState.MovingToAttack; }
                 break;
 
             case EnemyState.Traveling:
-                // if (currentTargetWaypoint >= enemyPath.GetNumberOfWaypoints())
-                // {
-                    /* TODO: Fix waypoint issue with enemy, documented steps to reproduce below
-                     - Let the enemy go to our base
-                     - spawn tower behind them
-                     - they attack tower
-                     - stand still looking away from tower
+                    // if (currentTargetWaypoint >= enemyPath.GetNumberOfWaypoints())
+                    // {
+                        /* TODO: Fix waypoint issue with enemy, documented steps to reproduce below
+                          - Let the enemy go to our base
+                          - spawn tower behind them
+                          - they attack tower
+                          - stand still looking away from tower
                      
-                     Potential issues:
-                     - No line of sight to base
-                     - Way points may no longer be targeted
-                     - Way point count may need to be tracked
-                     - Looks like EnemyPathB doesn't have 6-9 filled out, this might be the culprit.
+                       Potential issues:
+                          - No line of sight to base
+                          - Way points may no longer be targeted
+                          - Way point count may need to be tracked
+                          - Looks like EnemyPathB doesn't have 6-9 filled out, this might be the culprit.
                     
-                     Bug found:
-                     - More than 10 way points reported back
-                    */
-                //     Debug.Log($"We stopped for no reason. Waypoint: {currentTargetWaypoint}");
-                //     enemyState = EnemyState.Stopped;
-                //     break;
-                // }
+                       Bug found:
+                          - More than 10 way points reported back
+                            */
+
+                    //     Debug.Log($"We stopped for no reason. Waypoint: {currentTargetWaypoint}");
+                    //     enemyState = EnemyState.Stopped;
+                    //     break;
+                    // }
 
                 transform.LookAt(enemyPath.GetWaypoint(currentTargetWaypoint));
 
@@ -165,16 +189,21 @@ public class Enemy : MonoBehaviour
                     {
                         enemyState = EnemyState.MovingToAttack; break;
 
-
                     }
 
 
                 }
-               
-                ScanForTower();
+
+                if (towerSpawner.towersInScene)
+                { ScanForTower(); }
+                else { ScanForLooter(); }
 
                 if (targetedTower && targetedTower.towerIsActive)
                     enemyState = EnemyState.MovingToAttack;
+
+                if (targetedRaccoon)
+                { enemyState = EnemyState.MovingToAttack; }
+
                 break;
             
             case EnemyState.MovingToAttack:
@@ -209,6 +238,36 @@ public class Enemy : MonoBehaviour
                     break;
                 }
 
+                if (targetedRaccoon)
+                {
+                    if (!enemySlotAroundLooter)
+                    {
+                        if (targetedRaccoon.GetEnemySlotLooter(this, out Transform slotTransform))
+                        {
+                            enemySlotAroundLooter = slotTransform;
+                        }
+                        else
+                        {
+                            enemyState = EnemyState.Traveling; break;
+                        }
+                    }
+
+                    transform.LookAt(enemySlotAroundLooter.transform.position);
+                    transform.position = Vector3.MoveTowards(
+                    transform.position,                                   // where from
+                    enemySlotAroundLooter.transform.position,               // where to
+                    speed * Time.deltaTime                        // how fast
+                    );
+
+                    if (Vector3.Distance(transform.position,
+                        enemySlotAroundLooter.transform.position) < 0.1f)
+                    {
+                        enemyState = EnemyState.Attacking;
+                    }
+                    break;
+
+                }
+
                 if (homebase)
                 {
                     animator.ResetTrigger("walk");
@@ -227,13 +286,19 @@ public class Enemy : MonoBehaviour
                     enemySlotAroundHomebase.transform.position,          // where to
                     speed * Time.deltaTime                              // how fast
                     );
-                    ScanForTower();
+                    if (towerSpawner.towersInScene)
+                    { ScanForTower(); }
+                    else { ScanForLooter(); }
 
                     if (targetedTower && targetedTower.towerIsActive)
                         enemyState = EnemyState.MovingToAttack;
+
+                    if (targetedRaccoon)
+                    { enemyState = EnemyState.MovingToAttack; }
+
                     break; 
                 }
-                // Nothing to do, go back to travelling
+                // Nothing to do, go back to traveling
                 enemyState = EnemyState.Traveling;
                 break;
 
@@ -257,6 +322,25 @@ public class Enemy : MonoBehaviour
                     
                 }
 
+                if (targetedRaccoon)
+                {
+                    transform.LookAt(targetedRaccoon.transform);
+                    animator.ResetTrigger("walk");
+                    animator.ResetTrigger("stopped");
+                    animator.SetTrigger("punch");
+                    foreach (Collider c in colliders)
+                    {
+                        damageDealingTimer += Time.deltaTime;
+                        if (damageDealingTimer < damageDealingDelay)
+                        {
+                            return;
+                        }
+                        damageDealingTimer = 0;
+                        targetedRaccoon.TakeDamage(enemyDamage);
+                    }
+
+                }
+
                 // Nothing to do, go back to travelling
                 enemyState = EnemyState.Traveling;
                 break;
@@ -271,7 +355,6 @@ public class Enemy : MonoBehaviour
 
     public void InflictDamage(float incomingDamage)
     {
-        Debug.Log("Got Hit");
         currentHealth -= incomingDamage;
         gameSettings.damageDealt += incomingDamage;
 
@@ -306,6 +389,24 @@ public class Enemy : MonoBehaviour
             targetedTower = towersInRange[0];
         }
 
+
+    }
+
+    public void ScanForLooter()
+    {
+        colliders = Physics.OverlapSphere(transform.position, range, looterLayers);
+
+        looterRaccoonsInRange.Clear();
+
+        foreach (Collider c in colliders)
+        {
+            looterRaccoonsInRange.Add(c.GetComponent<LooterRaccoon>());
+        }
+
+        if (looterRaccoonsInRange.Count != 0)
+        {
+            targetedRaccoon = looterRaccoonsInRange[0];
+        }
 
     }
 

@@ -42,7 +42,7 @@ public class TowerSpawner : MonoBehaviour
     //towers spawned list
     [Header("List of towers:")]
     [SerializeField] public List<Tower> towers;
-    public bool towerInScene = false;
+    public bool towersInScene = false;
 
     private void Awake()
     {
@@ -122,11 +122,11 @@ public class TowerSpawner : MonoBehaviour
 
             if (towers.Count > 0)
             {
-                towerInScene = true;
+                towersInScene = true;
             }
             else
             {
-                towerInScene = false;
+                towersInScene = false;
             }
 
         }

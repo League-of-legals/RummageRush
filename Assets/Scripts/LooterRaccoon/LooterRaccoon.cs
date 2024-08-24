@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
@@ -25,6 +26,20 @@ public class LooterRaccoon : MonoBehaviour
     [SerializeField] public GameObject homebase;
     [SerializeField] public HUDmanager hudManager;
 
+    [SerializeField] List<EnemySlotLooter> enemySlotsLooter;
+
+    // health
+    [SerializeField] public float raccoonHealth = 50f;
+    public float currentRaccoonHealth;
+
+    private void Awake()
+    {
+        enemySlotsLooter = new List<EnemySlotLooter>();
+        foreach (Transform t in transform)
+            if (t.name == "EnemySlotsLooter")
+                foreach (Transform slot in t)
+                    enemySlotsLooter.Add(new EnemySlotLooter(slot));
+    }
 
 
     private void Start()
@@ -120,6 +135,69 @@ public class LooterRaccoon : MonoBehaviour
         resources = 0;
         hasLoot = false;
         speed = speedDefault;
+    }
+
+
+    public void TakeDamage(float enemyDamage)
+    {
+        currentRaccoonHealth -= enemyDamage;
+
+        if (currentRaccoonHealth <= 0)
+        {
+
+            Destroy(this.gameObject);
+        }
+    }
+
+    public bool GetEnemySlotLooter(Enemy enemy, out Transform transform)
+    {
+        // This method allows the tower to tell an
+        // attacking enemy where to go and stand
+
+        // Is the enemy already occupying a slot?
+        foreach (EnemySlotLooter slot in enemySlotsLooter)
+        {
+            if (slot.enemy == enemy)
+            {
+                transform = slot.transform;
+                return true;
+            }
+        }
+
+        // If not, is there an emptly slot available?
+        for (int i = 0; i < enemySlotsLooter.Count; i++)
+        {
+            if (enemySlotsLooter[i].enemy == null)
+            {
+                enemySlotsLooter[i].SetEnemy(enemy);
+                transform = enemySlotsLooter[i].transform;
+                return true;
+            }
+        }
+
+        // No slots available
+        transform = null;
+        return false;
+    }
+
+
+    [Serializable]
+    class EnemySlotLooter
+    {
+
+        public Transform transform;
+        public Enemy enemy;
+
+        public EnemySlotLooter(Transform transform)
+        {
+            this.transform = transform;
+            this.enemy = null;
+        }
+
+        public void SetEnemy(Enemy enemy)
+        {
+            this.enemy = enemy;
+        }
     }
 
 }

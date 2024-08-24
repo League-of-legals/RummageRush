@@ -115,6 +115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89596efdf16d76d46bfe3af4e7c4c2a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resourceLoadText: {fileID: 708839932743648390}
+  looterRaccoon: {fileID: 0}
 --- !u!1 &4710459124466132175
 GameObject:
   m_ObjectHideFlags: 0

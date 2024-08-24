@@ -15175,6 +15175,9 @@ MonoBehaviour:
   - {fileID: 555164198}
   - {fileID: 216506324}
   buttonSpawn: {fileID: 1910681740}
+  resourcePool: {fileID: 1909863804}
+  homebase: {fileID: 1492229687}
+  hudManager: {fileID: 1918152486}
 --- !u!1 &1821179881
 GameObject:
   m_ObjectHideFlags: 0

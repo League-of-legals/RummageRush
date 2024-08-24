@@ -28,17 +28,21 @@ public class TowerSpawner : MonoBehaviour
 
     private Vector3 mousePosition;
 
+    [Header("References:")]
     [SerializeField] GameSettingsSO gameSettings;
     [SerializeField] HUDmanager hudManager;
     [SerializeField] TMP_Text status;
 
     //buttons
+    [Header("Buttons:")]
     [SerializeField] Button button1;
     [SerializeField] Button button2;
     [SerializeField] Button button3;
 
     //towers spawned list
+    [Header("List of towers:")]
     [SerializeField] public List<Tower> towers;
+    public bool towerInScene = false;
 
     private void Awake()
     {
@@ -116,6 +120,15 @@ public class TowerSpawner : MonoBehaviour
 
             }
 
+            if (towers.Count > 0)
+            {
+                towerInScene = true;
+            }
+            else
+            {
+                towerInScene = false;
+            }
+
         }
 
     }
@@ -167,6 +180,7 @@ public class TowerSpawner : MonoBehaviour
         {
             Debug.Log($"Purchased tower");
             towerIndicator = Instantiate(newTower, mousePosition, Quaternion.identity);
+            towerIndicator.towerSpawner = this;
             spawnerIsActive = true;
             gameSettings.money -= newTower.towerCost;
             hudManager.UpdateMoneyText();

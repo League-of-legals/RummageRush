@@ -67,6 +67,8 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] Homebase homebase;
 
+    [SerializeField] public TowerSpawner towerSpawner;
+
     // remember where to go
     private int currentTargetWaypoint;
     private float currentTime;

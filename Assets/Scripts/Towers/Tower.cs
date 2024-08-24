@@ -47,6 +47,8 @@ public class Tower : MonoBehaviour
 
     [SerializeField] EventManagerSO eventManager;
 
+    [SerializeField] public TowerSpawner towerSpawner;
+
     private void Awake()
     {
         // initial setup
@@ -193,6 +195,7 @@ public class Tower : MonoBehaviour
                     new Vector3(transform.position.x, transform.position.y + 1, transform.position.z - 1),
                     Quaternion.identity);
 
+                towerSpawner.towers.Remove(this);
                 Destroy(this.gameObject);
             }        
     }

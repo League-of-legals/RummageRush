@@ -7,8 +7,8 @@ public class LooterRaccoon : MonoBehaviour
 {
     [SerializeField] public LooterRaccoonPath path;
     private int currentTargetWaypoint;
-    public float speed = 2;
-    public float speedDefault = 2;
+    public float speed = 2.5f;
+    public float speedDefault = 2.5f;
     public float speedHauling = 1.5f;
     private int numberOfWaypoints;
     private bool hasLoot;
@@ -21,8 +21,9 @@ public class LooterRaccoon : MonoBehaviour
 
     [SerializeField] ResourceLoadIndicatorUI resourceLoadIndicatorUI;
 
-    [SerializeField] GameObject resourcePool;
-    [SerializeField] GameObject homebase;
+    [SerializeField] public GameObject resourcePool;
+    [SerializeField] public GameObject homebase;
+    [SerializeField] public HUDmanager hudManager;
 
 
 
@@ -32,8 +33,9 @@ public class LooterRaccoon : MonoBehaviour
         hasLoot = false;
         //cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         resourceLoadIndicatorUI = GetComponentInChildren<ResourceLoadIndicatorUI>();
-        resourcePool = GameObject.FindGameObjectWithTag("ResourcePool");
-        homebase = GameObject.FindGameObjectWithTag("Homebase");
+        //resourcePool = GameObject.FindGameObjectWithTag("ResourcePool");
+        //homebase = GameObject.FindGameObjectWithTag("Homebase");
+        resourceLoadIndicatorUI.UpdateLoadText(" ");
     }
 
 
@@ -94,10 +96,13 @@ public class LooterRaccoon : MonoBehaviour
         speed = 0f;
         yield return new WaitForSeconds(1f);
         resources += resourceGain;
+        resourceLoadIndicatorUI.UpdateLoadText($"{resources}");
         yield return new WaitForSeconds(1f);
         resources += resourceGain;
+        resourceLoadIndicatorUI.UpdateLoadText($"{resources}");
         yield return new WaitForSeconds(1f);
         resources += resourceGain;
+        resourceLoadIndicatorUI.UpdateLoadText($"{resources}");
         yield return new WaitForSeconds(1f);
         speed = speedHauling;
         hasLoot = true;
@@ -109,6 +114,9 @@ public class LooterRaccoon : MonoBehaviour
         yield return new WaitForSeconds(1f);
         speed = 0f;
         yield return new WaitForSeconds(2f);
+        gameSettings.money += resources;
+        resourceLoadIndicatorUI.UpdateLoadText($" ");
+        hudManager.UpdateMoneyText();
         resources = 0;
         hasLoot = false;
         speed = speedDefault;

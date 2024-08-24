@@ -6,25 +6,31 @@ using UnityEngine.UI;
 public class LooterRacoonSpawner : MonoBehaviour
 {
 
-    [SerializeField] LooterRaccoon looterRaccoon;
+    public LooterRaccoon looterRaccoon;
+    [SerializeField] Camera cameraMain;
+
+    [SerializeField] LooterRaccoon newRaccoon;
 
     [SerializeField] List<LooterRaccoonPath> paths;
 
     [SerializeField] Button buttonSpawn;
 
-    private void SpawnLooter(LooterRaccoonPath chosenPath)
+    private void SpawnLooter()
     {
-        Instantiate(looterRaccoon, transform.position, Quaternion.identity).SetLooterPath(chosenPath);
+        //Instantiate(looterRaccoon, transform.position, Quaternion.identity).SetLooterPath(chosenPath)
+        newRaccoon = Instantiate(looterRaccoon, transform.position, Quaternion.identity);
+        newRaccoon.SetLooterPath(paths[(int)Random.Range(0, paths.Count)]);
+        newRaccoon.cameraMain = cameraMain;
     }
 
     private void Start()
     {
-        SpawnLooter(paths[(int)Random.Range(0, paths.Count)]);
+        SpawnLooter();
     }
 
     private void OnEnable()
     {
-        buttonSpawn.onClick.AddListener(delegate { SpawnLooter(paths[(int)Random.Range(0, paths.Count)]); }) ;
+        buttonSpawn.onClick.AddListener(delegate { SpawnLooter(); }) ;
     }
 
 }

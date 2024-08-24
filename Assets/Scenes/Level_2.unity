@@ -8315,6 +8315,7 @@ MonoBehaviour:
   button2: {fileID: 599531730}
   button3: {fileID: 734360280}
   towers: []
+  towersInScene: 0
 --- !u!4 &917219771
 Transform:
   m_ObjectHideFlags: 0
@@ -13617,6 +13618,8 @@ MonoBehaviour:
     type: 3}
   enemyHeavy: {fileID: 6206755630489023651, guid: d3ef5ca093f5da74294b3ad6125ed03f,
     type: 3}
+  newEnemy: {fileID: 0}
+  towerSpawner: {fileID: 917219770}
   gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
 --- !u!4 &1665862330
 Transform:

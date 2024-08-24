@@ -15169,6 +15169,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   looterRaccoon: {fileID: -5248333223227804391, guid: 2fe2357cdc872fe46a1c9587d1be6fc1,
     type: 3}
+  cameraMain: {fileID: 590119023}
+  newRaccoon: {fileID: 0}
   paths:
   - {fileID: 555164198}
   - {fileID: 216506324}

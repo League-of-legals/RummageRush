@@ -15,7 +15,7 @@ public class LooterRaccoon : MonoBehaviour
     [SerializeField] public float resourceGain = 50f;
     [SerializeField] public float resources;    
     
-    [SerializeField] Camera cameraMain;
+    [SerializeField] public Camera cameraMain;
 
     [SerializeField] GameSettingsSO gameSettings;
 
@@ -30,7 +30,7 @@ public class LooterRaccoon : MonoBehaviour
     {
         numberOfWaypoints = path.GetNumberOfWaypoints();
         hasLoot = false;
-        cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        //cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         resourceLoadIndicatorUI = GetComponentInChildren<ResourceLoadIndicatorUI>();
         resourcePool = GameObject.FindGameObjectWithTag("ResourcePool");
         homebase = GameObject.FindGameObjectWithTag("Homebase");

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.ProBuilder.MeshOperations;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -74,6 +75,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] List<LooterRaccoon> looterRaccoonsInRange;
     [SerializeField] LooterRaccoon targetedRaccoon;
 
+    //navigation
+    private NavMeshAgent agent;
+
     [Header("Other references:")]
     //other references
    
@@ -103,6 +107,9 @@ public class Enemy : MonoBehaviour
         // get references
         animator = GetComponentInChildren<Animator>();
         homebase = FindFirstObjectByType<Homebase>();
+        agent = GetComponent<NavMeshAgent>();
+        agent.Warp(transform.position);
+
     }
     private void Update()
     {
@@ -124,8 +131,7 @@ public class Enemy : MonoBehaviour
             case EnemyState.Stopped:
                 animator.ResetTrigger("walk");
                 animator.ResetTrigger("punch");
-                
-                // Regardless of actually attacking, if stopped, it will punch
+
                 animator.SetTrigger("stopped");
 
 
@@ -142,48 +148,51 @@ public class Enemy : MonoBehaviour
                 { enemyState = EnemyState.MovingToAttack; }
                 break;
 
+
+
             case EnemyState.Traveling:
-                    // if (currentTargetWaypoint >= enemyPath.GetNumberOfWaypoints())
-                    // {
-                        /* TODO: Fix waypoint issue with enemy, documented steps to reproduce below
-                          - Let the enemy go to our base
-                          - spawn tower behind them
-                          - they attack tower
-                          - stand still looking away from tower
-                     
-                       Potential issues:
-                          - No line of sight to base
-                          - Way points may no longer be targeted
-                          - Way point count may need to be tracked
-                          - Looks like EnemyPathB doesn't have 6-9 filled out, this might be the culprit.
-                    
-                       Bug found:
-                          - More than 10 way points reported back
-                            */
+                animator.ResetTrigger("punch");
+                animator.ResetTrigger("stopped");
+                animator.SetTrigger("walk");
+                // if (currentTargetWaypoint >= enemyPath.GetNumberOfWaypoints())
+                // {
+                /* TODO: Fix waypoint issue with enemy, documented steps to reproduce below
+                  - Let the enemy go to our base
+                  - spawn tower behind them
+                  - they attack tower
+                  - stand still looking away from tower
 
-                    //     Debug.Log($"We stopped for no reason. Waypoint: {currentTargetWaypoint}");
-                    //     enemyState = EnemyState.Stopped;
-                    //     break;
-                    // }
+               Potential issues:
+                  - No line of sight to base
+                  - Way points may no longer be targeted
+                  - Way point count may need to be tracked
+                  - Looks like EnemyPathB doesn't have 6-9 filled out, this might be the culprit.
 
-                transform.LookAt(enemyPath.GetWaypoint(currentTargetWaypoint));
+               Bug found:
+                  - More than 10 way points reported back
+                    */
 
-                transform.position = Vector3.MoveTowards(
-                transform.position,                                    // where from
-                enemyPath.GetWaypoint(currentTargetWaypoint).position,  // where to
-                speed * Time.deltaTime                         // how fast
-                );
+                //     Debug.Log($"We stopped for no reason. Waypoint: {currentTargetWaypoint}");
+                //     enemyState = EnemyState.Stopped;
+                //     break;
+                // }
+
+                //transform.LookAt(enemyPath.GetWaypoint(currentTargetWaypoint));
+
+                agent.destination =
+                enemyPath.GetWaypoint(currentTargetWaypoint).position;
+                agent.speed = defaultSpeed;
 
                 // are we close enough to the destination?
-                if (Vector3.Distance(transform.position, enemyPath.GetWaypoint(currentTargetWaypoint).position) < 0.1f
-                     && currentTargetWaypoint < 10) // we were getting more than 10 waypoints
+                if (Vector3.Distance(transform.position, enemyPath.GetWaypoint(currentTargetWaypoint).position) < 0.6f
+                     && currentTargetWaypoint < enemyPath.waypoints.Count - 1) // we were getting more than 10 waypoints
                 {
                     // increment the current target waypoint
                     currentTargetWaypoint++;
                 }
 
-                if (Vector3.Distance(transform.position, enemyPath.GetWaypoint(currentTargetWaypoint).position) < 0.2f
-                    && currentTargetWaypoint == 10)
+                if (Vector3.Distance(transform.position, enemyPath.GetWaypoint(currentTargetWaypoint).position) < 0.6f
+                    && currentTargetWaypoint == enemyPath.waypoints.Count - 1 )
                 {
                     if (homebase)
                     {
@@ -207,6 +216,11 @@ public class Enemy : MonoBehaviour
                 break;
             
             case EnemyState.MovingToAttack:
+                animator.ResetTrigger("punch");
+                animator.ResetTrigger("stopped");
+                animator.SetTrigger("walk");
+                agent.speed = defaultSpeed;
+
                 if (targetedTower && targetedTower.towerIsActive)
                 {
                     if (!enemySlotAroundTower)
@@ -222,16 +236,18 @@ public class Enemy : MonoBehaviour
                             enemyState = EnemyState.Traveling; break;
                         }
                     }
-                    
-                    transform.LookAt(enemySlotAroundTower.transform.position);
-                    transform.position = Vector3.MoveTowards(
-                    transform.position,                                   // where from
-                    enemySlotAroundTower.transform.position,               // where to
-                    speed * Time.deltaTime                        // how fast
-                    );
+
+                    //transform.LookAt(enemySlotAroundTower.transform.position);
+                    //transform.position = Vector3.MoveTowards(
+                    //transform.position,                                   // where from
+                    //enemySlotAroundTower.transform.position,               // where to
+                    //speed * Time.deltaTime                        // how fast
+                    //);
+
+                    agent.destination = enemySlotAroundTower.transform.position;
 
                     if (Vector3.Distance(transform.position,
-                        enemySlotAroundTower.transform.position) < 0.1f)
+                        enemySlotAroundTower.transform.position) < 0.6f)
                     {                    
                         enemyState = EnemyState.Attacking;
                     }
@@ -252,15 +268,18 @@ public class Enemy : MonoBehaviour
                         }
                     }
 
-                    transform.LookAt(enemySlotAroundLooter.transform.position);
-                    transform.position = Vector3.MoveTowards(
-                    transform.position,                                   // where from
-                    enemySlotAroundLooter.transform.position,               // where to
-                    speed * Time.deltaTime                        // how fast
-                    );
+                    //transform.LookAt(enemySlotAroundLooter.transform.position);
+                    //transform.position = Vector3.MoveTowards(
+                    //transform.position,                                   // where from
+                    //enemySlotAroundLooter.transform.position,               // where to
+                    //speed * Time.deltaTime                        // how fast
+                    //);
+
+
+                    agent.destination = enemySlotAroundLooter.transform.position;
 
                     if (Vector3.Distance(transform.position,
-                        enemySlotAroundLooter.transform.position) < 0.1f)
+                        enemySlotAroundLooter.transform.position) < 0.7f)
                     {
                         enemyState = EnemyState.Attacking;
                     }
@@ -270,8 +289,6 @@ public class Enemy : MonoBehaviour
 
                 if (homebase)
                 {
-                    animator.ResetTrigger("walk");
-                    animator.SetTrigger("punch");
 
                     if (!enemySlotAroundHomebase)
                     {
@@ -280,23 +297,18 @@ public class Enemy : MonoBehaviour
                             enemySlotAroundHomebase = slotTransform;
                         }
                     }
-                    transform.LookAt(homebase.transform.position);
-                    transform.position = Vector3.MoveTowards(
-                    transform.position,                                   // where from
-                    enemySlotAroundHomebase.transform.position,          // where to
-                    speed * Time.deltaTime                              // how fast
-                    );
-                    if (towerSpawner.towersInScene)
-                    { ScanForTower(); }
-                    else { ScanForLooter(); }
 
-                    if (targetedTower && targetedTower.towerIsActive)
-                        enemyState = EnemyState.MovingToAttack;
+                    agent.destination = enemySlotAroundHomebase.transform.position;
 
-                    if (targetedRaccoon)
-                    { enemyState = EnemyState.MovingToAttack; }
+                    if (Vector3.Distance(transform.position,
+                    enemySlotAroundHomebase.transform.position) < 1f)
+                    {
+                        enemyState = EnemyState.Attacking;
+                    }
+                    break;
 
-                    break; 
+
+                    
                 }
                 // Nothing to do, go back to traveling
                 enemyState = EnemyState.Traveling;
@@ -328,6 +340,9 @@ public class Enemy : MonoBehaviour
                     animator.ResetTrigger("walk");
                     animator.ResetTrigger("stopped");
                     animator.SetTrigger("punch");
+
+                    agent.speed = 0;
+
                     foreach (Collider c in colliders)
                     {
                         damageDealingTimer += Time.deltaTime;
@@ -340,6 +355,35 @@ public class Enemy : MonoBehaviour
                     }
 
                 }
+
+                if (homebase)
+                    if (!enemySlotAroundHomebase) 
+                    { 
+                        enemyState = EnemyState.MovingToAttack;
+                    }
+                    else if (Vector3.Distance(transform.position,
+                    enemySlotAroundHomebase.transform.position) < 1f)
+                    {
+                        transform.LookAt(homebase.transform);
+                        animator.ResetTrigger("walk");
+                        animator.ResetTrigger("stopped");
+                        animator.SetTrigger("punch");
+
+                        agent.speed = 0;
+
+                        if (towerSpawner.towersInScene)
+                        { ScanForTower(); }
+                        else { ScanForLooter(); }
+
+                        if (targetedTower && targetedTower.towerIsActive)
+                        enemyState = EnemyState.MovingToAttack;
+
+                        if (targetedRaccoon)
+                        { enemyState = EnemyState.MovingToAttack; }
+
+                        break;
+
+                    }
 
                 // Nothing to do, go back to travelling
                 enemyState = EnemyState.Traveling;
@@ -416,7 +460,7 @@ public class Enemy : MonoBehaviour
         animator.ResetTrigger("punch");
         animator.ResetTrigger("stopped");
         animator.SetTrigger("die");
-        speed = 0f;
+        agent.speed = 0f;
         yield return new WaitForSeconds(3.5f);
         gameSettings.money += rewardCost;
         eventManager.EnemyDestroyed();

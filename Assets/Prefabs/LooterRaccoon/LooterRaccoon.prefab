@@ -92,6 +92,9 @@ MonoBehaviour:
   resourcePool: {fileID: 0}
   homebase: {fileID: 0}
   hudManager: {fileID: 0}
+  enemySlotsLooter: []
+  raccoonHealth: 100
+  currentRaccoonHealth: 0
 --- !u!136 &-2683750370609937168
 CapsuleCollider:
   m_ObjectHideFlags: 0

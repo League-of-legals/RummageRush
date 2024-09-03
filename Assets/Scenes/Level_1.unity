@@ -10052,6 +10052,7 @@ MonoBehaviour:
   button2: {fileID: 1110351027}
   button3: {fileID: 57283661}
   towers: []
+  towersInScene: 0
 --- !u!1 &1152065887
 GameObject:
   m_ObjectHideFlags: 0
@@ -15007,6 +15008,8 @@ MonoBehaviour:
     type: 3}
   enemyHeavy: {fileID: 6206755630489023651, guid: d3ef5ca093f5da74294b3ad6125ed03f,
     type: 3}
+  newEnemy: {fileID: 0}
+  towerSpawner: {fileID: 1134429951}
   gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
 --- !u!1001 &1901768022
 PrefabInstance:
@@ -17656,7 +17659,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventManager: {fileID: 11400000, guid: 460f86889e4558c4794133662cbd2532, type: 2}
-  homebaseHealth: 200
+  homebaseHealth: 150
   currentHomebaseHealth: 0
   homebaseHealthBar: {fileID: 239838335}
   damageTakingTimer: 0

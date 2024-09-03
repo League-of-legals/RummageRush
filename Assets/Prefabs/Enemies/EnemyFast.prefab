@@ -594,6 +594,7 @@ GameObject:
   - component: {fileID: 3906787295688218573}
   - component: {fileID: 6206755630489023651}
   - component: {fileID: 99367023899445291}
+  - component: {fileID: -4313754575062455287}
   m_Layer: 6
   m_Name: EnemyFast
   m_TagString: Enemy
@@ -644,17 +645,23 @@ MonoBehaviour:
   currentHealth: 0
   healthBar: {fileID: 3132002167809668289, guid: 57a258435a8bac74483a852e86fb7964,
     type: 3}
+  colliders: []
   towerLayers:
     serializedVersion: 2
     m_Bits: 512
-  colliders: []
   towersInRange: []
   targetedTower: {fileID: 0}
   towerHealthBar: {fileID: 0}
+  looterLayers:
+    serializedVersion: 2
+    m_Bits: 2048
+  looterRaccoonsInRange: []
+  targetedRaccoon: {fileID: 0}
   gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
   eventManager: {fileID: 11400000, guid: 460f86889e4558c4794133662cbd2532, type: 2}
   animator: {fileID: 0}
   homebase: {fileID: 0}
+  towerSpawner: {fileID: 0}
 --- !u!136 &99367023899445291
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -678,6 +685,28 @@ CapsuleCollider:
   m_Height: 1.6068147
   m_Direction: 1
   m_Center: {x: 0.04753959, y: 0.4001457, z: -0.020698369}
+--- !u!195 &-4313754575062455287
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511601534430556084}
+  m_Enabled: 1
+  m_AgentTypeID: -334000983
+  m_Radius: 0.5
+  m_Speed: 4
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &2700058475680466643
 GameObject:
   m_ObjectHideFlags: 0

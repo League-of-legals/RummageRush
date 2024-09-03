@@ -7,7 +7,7 @@ public class EnemyPath : MonoBehaviour
     // === ENEMY PATH : OWNER OF THE PATH ===
 
     // list of waypoints
-    [SerializeField] List<Transform> waypoints;
+    [SerializeField] public List<Transform> waypoints;
 
     private void Awake()
     {

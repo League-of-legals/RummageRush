@@ -42,7 +42,7 @@ public class TowerSpawner : MonoBehaviour
     //towers spawned list
     [Header("List of towers:")]
     [SerializeField] public List<Tower> towers;
-    public bool towersInScene = false;
+    //public bool towersInScene = false;
 
     private void Awake()
     {
@@ -95,21 +95,32 @@ public class TowerSpawner : MonoBehaviour
 
 
             // place the tower
-            if (spawnerIsActive && hudManager.randomEventScreen.activeInHierarchy == false)
+            if (spawnerIsActive)
             {
-                towerIndicator.transform.position = GetMousePosition();
 
-                // drop the tower
-                if (Input.GetMouseButton(0))
+                if (hudManager.randomEventScreen.activeInHierarchy == false)
                 {
-                    towerIndicator.activateTower();
-                    towers.Add(towerIndicator);
-                    towerIndicator = null;
-                    spawnerIsActive = false;
-                }
+                    towerIndicator.transform.position = GetMousePosition();
 
-                // cancel placement
-                else if (Input.GetMouseButton(1))
+                    // drop the tower
+                    if (Input.GetMouseButton(0))
+                    {
+                        towerIndicator.activateTower();
+                        //towers.Add(towerIndicator);
+                        towerIndicator = null;
+                        spawnerIsActive = false;
+                    }
+
+                    // cancel placement
+                    else if (Input.GetMouseButton(1))
+                    {
+                        gameSettings.money += towerIndicator.towerCost;
+                        hudManager.UpdateMoneyText();
+                        Destroy(towerIndicator.gameObject);
+                        spawnerIsActive = false;
+                    }
+                }
+                else
                 {
                     gameSettings.money += towerIndicator.towerCost;
                     hudManager.UpdateMoneyText();
@@ -120,14 +131,14 @@ public class TowerSpawner : MonoBehaviour
 
             }
 
-            if (towers.Count > 0)
-            {
-                towersInScene = true;
-            }
-            else
-            {
-                towersInScene = false;
-            }
+            //if (towers.Count > 0)
+            //{
+            //    towersInScene = true;
+            //}
+            //else
+            //{
+            //    towersInScene = false;
+            //}
 
         }
 

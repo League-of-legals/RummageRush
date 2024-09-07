@@ -39,7 +39,7 @@ public class EnemySpawner : MonoBehaviour
         // which enemy to spawn, where, what rotation, which path
         newEnemy = Instantiate(enemyToSpawn, transform.position, Quaternion.identity);
         newEnemy.SetEnemyPath(chosenPath);      // set path for the enemy
-        newEnemy.towerSpawner = towerSpawner;   // get references for the tower spawner
+        // newEnemy.towerSpawner = towerSpawner;   // get references for the tower spawner
         enemies.Add(enemyToSpawn);              // add the enemy to the list of enemies
     }
 

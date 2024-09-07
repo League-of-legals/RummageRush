@@ -87,7 +87,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] Homebase homebase;
 
-    [SerializeField] public TowerSpawner towerSpawner;
+    //[SerializeField] public TowerSpawner towerSpawner;
 
     // remember where to go
     private int currentTargetWaypoint;
@@ -135,9 +135,9 @@ public class Enemy : MonoBehaviour
                 animator.SetTrigger("stopped");
 
 
-                if (towerSpawner.towersInScene)
-                { ScanForTower(); }
-                else { ScanForLooter(); }
+                ScanForTower();
+                if (!targetedTower)
+                { ScanForLooter(); }
 
                 if (targetedTower && targetedTower.towerIsActive)
                 {
@@ -203,9 +203,9 @@ public class Enemy : MonoBehaviour
 
                 }
 
-                if (towerSpawner.towersInScene)
-                { ScanForTower(); }
-                else { ScanForLooter(); }
+                ScanForTower(); 
+                if (!targetedTower)
+                { ScanForLooter(); }
 
                 if (targetedTower && targetedTower.towerIsActive)
                     enemyState = EnemyState.MovingToAttack;
@@ -371,9 +371,13 @@ public class Enemy : MonoBehaviour
 
                         agent.speed = 0;
 
-                        if (towerSpawner.towersInScene)
-                        { ScanForTower(); }
-                        else { ScanForLooter(); }
+                        //if (towerSpawner.towersInScene)
+                        //{ ScanForTower(); }
+                        //else { ScanForLooter(); }
+
+                        ScanForTower();
+                        if (!targetedTower)
+                        { ScanForLooter(); }
 
                         if (targetedTower && targetedTower.towerIsActive)
                         enemyState = EnemyState.MovingToAttack;

@@ -42,7 +42,7 @@ public class Tower : MonoBehaviour
 
     [SerializeField] ExplosionEffect effectCanvas;
 
-    [SerializeField] Animator animator;
+    [SerializeField] public Animator animator;
     [SerializeField] Transform raccoon;
 
     [SerializeField] EventManagerSO eventManager;
@@ -73,6 +73,7 @@ public class Tower : MonoBehaviour
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
+        animator.SetTrigger("Idle");
     }
 
 
@@ -105,6 +106,9 @@ public class Tower : MonoBehaviour
                 // if there's a targeted enemy, then increment the timer every frame
                 if (targetedEnemy)
                 {
+                    animator.ResetTrigger("Idle");
+                    animator.SetTrigger("Throw");
+
                     raccoon = this.gameObject.transform.GetChild(0);
                     raccoon.LookAt(targetedEnemy.transform.position);
 
@@ -195,7 +199,7 @@ public class Tower : MonoBehaviour
                     new Vector3(transform.position.x, transform.position.y + 1, transform.position.z - 1),
                     Quaternion.identity);
 
-                towerSpawner.towers.Remove(this);
+                towerSpawner.towersInScene.Remove(this);
                 Destroy(this.gameObject);
             }        
     }

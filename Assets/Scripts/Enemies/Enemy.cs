@@ -76,11 +76,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] LooterRaccoon targetedRaccoon;
 
     //navigation
-    private NavMeshAgent agent;
+    public NavMeshAgent agent;
 
     [Header("Other references:")]
     //other references
-   
+    [SerializeField] public EnemySpawner enemySpawner;
     [SerializeField] GameSettingsSO gameSettings;
     [SerializeField] EventManagerSO eventManager;
     [SerializeField] Animator animator;
@@ -464,10 +464,12 @@ public class Enemy : MonoBehaviour
         animator.ResetTrigger("punch");
         animator.ResetTrigger("stopped");
         animator.SetTrigger("die");
+        enemySpawner.enemiesInScene.Remove(this);
+        gameSettings.enemiesDestroyed += 1;
         agent.speed = 0f;
         yield return new WaitForSeconds(3.5f);
         gameSettings.money += rewardCost;
-        eventManager.EnemyDestroyed();
+        //eventManager.EnemyDestroyed();
         Destroy(this.gameObject);
     }
 

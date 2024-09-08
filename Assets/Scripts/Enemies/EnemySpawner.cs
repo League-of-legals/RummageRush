@@ -8,14 +8,11 @@ public class EnemySpawner : MonoBehaviour
     // Spawns a wave of enemies to a chosen path 
 
     // == PATHS ==
-    //[SerializeField] EnemyPath enemyPathA;
-    //[SerializeField] EnemyPath enemyPathB;
-
     [SerializeField] List<EnemyPath> paths;
 
 
     // == ENEMIES ==
-    [SerializeField] public List<Enemy> enemies;
+    [SerializeField] public List<Enemy> enemiesInScene;
     [SerializeField] Enemy enemyDefault;
     [SerializeField] Enemy enemyFast;
     [SerializeField] Enemy enemyHeavy;
@@ -33,14 +30,17 @@ public class EnemySpawner : MonoBehaviour
     //[SerializeField] float randomDelayMax = 4.0f;
 
     [SerializeField] GameSettingsSO gameSettings;
+    [SerializeField] LevelManager levelManager;
 
     private void SpawnEnemy(Enemy enemyToSpawn, EnemyPath chosenPath)
     {
-        // which enemy to spawn, where, what rotation, which path
+        // which enemy to spawn, where, what rotation
         newEnemy = Instantiate(enemyToSpawn, transform.position, Quaternion.identity);
         newEnemy.SetEnemyPath(chosenPath);      // set path for the enemy
         // newEnemy.towerSpawner = towerSpawner;   // get references for the tower spawner
-        enemies.Add(enemyToSpawn);              // add the enemy to the list of enemies
+        newEnemy.enemySpawner = this;
+        enemiesInScene.Add(newEnemy);              // add the enemy to the list of enemies
+
     }
 
     private void Start()

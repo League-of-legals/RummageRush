@@ -20,37 +20,37 @@ public class LevelManager : MonoBehaviour
     [SerializeField] float randomEventTimer;
     [SerializeField] public float randomEventDuration = 8f;
 
-    [SerializeField] Tower towerDefault;
-    [SerializeField] Tower towerFast;
-    [SerializeField] Tower towerHeavy;
+    //[SerializeField] Tower towerDefault;
+    //[SerializeField] Tower towerFast;
+    //[SerializeField] Tower towerHeavy;
 
-    [SerializeField] Enemy enemyDefault;
-    [SerializeField] Enemy enemyFast;
-    [SerializeField] Enemy enemyHeavy;
-    public Enemy enemy;
+    //[SerializeField] Enemy enemyDefault;
+    //[SerializeField] Enemy enemyFast;
+    //[SerializeField] Enemy enemyHeavy;
+    //public Enemy enemy;
 
-    [SerializeField] Enemy[] enemiesInTheScene;
-    [SerializeField] Tower[] towersInTheScene;
+    //[SerializeField] List<Enemy> enemiesInTheScene;
+    //[SerializeField] List<Tower> towersInTheScene;
 
     [SerializeField] TMP_Text randomItemDescription;
 
-    [SerializeField] Animator animator;
+    //[SerializeField] Animator animator;
 
     private void Awake()
     {
         gameSettings.currentGameState = GameStates.inGame;
         Time.timeScale = 1f;
 
-        if (gameSettings.previousGameState == GameStates.inMainMenu)
-        {
-            
-            hudManager.DisplayTutorial();
-            gameSettings.currentGameState = GameStates.inTutorial;
-            Time.timeScale = 0f;
-        }
+        
 
         if (SceneManager.GetActiveScene().name == "Level_1")
-        {
+        {   
+            if (gameSettings.previousGameState == GameStates.inMainMenu)
+            {
+                hudManager.DisplayTutorial();
+                gameSettings.currentGameState = GameStates.inTutorial;
+                Time.timeScale = 0f;
+            }
             //gameSettings.currentGameState = GameStates.inGame;
             //Time.timeScale = 1f;
             gameSettings.ResetMoney();
@@ -59,10 +59,20 @@ public class LevelManager : MonoBehaviour
             gameSettings.enemiesDestroyed = 0;
 
         }
-        
     }
 
-    private void OnEnable()
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().name == "Level_2")
+        {
+            gameSettings.ResetMoney();
+            gameSettings.ResetDamageDealt();
+            gameSettings.enemiesSpawned = 7;
+            gameSettings.enemiesDestroyed = 0;
+        }
+    }
+
+    /* private void OnEnable()
     {
         eventManager.onEnemyDestroyed += UpdateKillCount;
     }
@@ -70,22 +80,12 @@ public class LevelManager : MonoBehaviour
     private void OnDisable()
     {
         eventManager.onEnemyDestroyed -= UpdateKillCount;
-    }
+    } */
+
 
     private void Update()
     {
-        FindEnemiesInTheScene();
-        FindTowersInTheScene();
-        foreach (Tower tower in towersInTheScene)
-        {
-            animator = tower.GetComponentInChildren<Animator>();
-            animator.SetTrigger("Idle");
-            if (tower.targetedEnemy != null)
-            {
-                animator.ResetTrigger("Idle");
-                animator.SetTrigger("Throw");
-            }
-        }
+               
 
         if (gameSettings.enemiesDestroyed == gameSettings.enemiesSpawned)
         {
@@ -172,15 +172,18 @@ public class LevelManager : MonoBehaviour
 
             if (randomEventTimer < randomEventDuration)
             {
+                //FindEnemiesInTheScene();
+                //FindTowersInTheScene();
+                gameSettings.damageDealt = 0;
 
                 if (randomEvent.itemName == "Banana peel")
                 {
                  
-                    foreach (Enemy enemy in enemySpawner.enemies)
-                    enemy.speed = 1f;
+                    foreach (Enemy enemy in enemySpawner.enemiesInScene)
+                    enemy.agent.speed = 1f;
 
-                    foreach (Enemy enemy in enemiesInTheScene)
-                    enemy.speed = 1f;
+                    //foreach (Enemy enemy in enemiesInTheScene)
+                    //enemy.speed = 1f;
                 }
 
                 else if (randomEvent.itemName == "Cardboard box")
@@ -194,7 +197,7 @@ public class LevelManager : MonoBehaviour
                 {
                     randomItemDescription.text =
                         $"Raccons shoot faster for {randomEventDuration} seconds!";
-                    foreach (Tower tower in towersInTheScene)
+                    foreach (Tower tower in towerSpawner.towersInScene)
                     tower.firingDelay = 0.3f;
                 }
 
@@ -202,14 +205,13 @@ public class LevelManager : MonoBehaviour
                 {
                     randomItemDescription.text =
                         $"Raccons are distracted and can't defend for {randomEventDuration} seconds!";
-                    foreach (Tower tower in towersInTheScene)
+                    foreach (Tower tower in towerSpawner.towersInScene)
                     {
                         if (tower != null)
                         {
                             tower.towerScanningTimer = 0;
-                            animator = tower.GetComponentInChildren<Animator>();
-                            animator.ResetTrigger("Throw");
-                            animator.SetTrigger("Idle");
+                            tower.animator.ResetTrigger("Throw");
+                            tower.animator.SetTrigger("Idle");
                             eventManager.RandomEventTowers();
                             tower.firingDelay = 10f;
                         }
@@ -220,14 +222,13 @@ public class LevelManager : MonoBehaviour
                 {
                     randomItemDescription.text =
                         $"Raccons are sick and can't defend for {randomEventDuration} seconds!";
-                    foreach (Tower tower in towersInTheScene)
+                    foreach (Tower tower in towerSpawner.towersInScene)
                     {
                         if (tower != null)
                         {
                             tower.towerScanningTimer = 0;
-                            animator = tower.GetComponentInChildren<Animator>();
-                            animator.ResetTrigger("Throw");
-                            animator.SetTrigger("Idle");
+                            tower.animator.ResetTrigger("Throw");
+                            tower.animator.SetTrigger("Idle");
                             eventManager.RandomEventTowers();
                             tower.firingDelay = 10f;
                         }
@@ -239,13 +240,10 @@ public class LevelManager : MonoBehaviour
                     randomItemDescription.text =
                         $"For {randomEventDuration} seconds enemies' maximum health is reduced!";
 
-                    foreach (Enemy enemy in enemiesInTheScene)
+                    foreach (Enemy enemy in enemySpawner.enemiesInScene)
                     {
                         enemy.maxHealth = 5f;
-
-                    }
-                        
-                    
+                    }                  
 
                 }
 
@@ -255,22 +253,22 @@ public class LevelManager : MonoBehaviour
             {
                 randomEvent.item = null;
                 randomEvent.itemName = null;
-                FindEnemiesInTheScene();
+                //FindEnemiesInTheScene();
                 eventManager.RandomEventStop();
 
-                foreach (Enemy enemy in enemySpawner.enemies)
-                    enemy.speed = enemy.defaultSpeed;
+                foreach (Enemy enemy in enemySpawner.enemiesInScene)
+                    enemy.agent.speed = enemy.defaultSpeed;
 
-                foreach (Enemy enemy in enemiesInTheScene)
-                    enemy.speed = enemy.defaultSpeed;
+                //foreach (Enemy enemy in enemiesInTheScene)
+                   // enemy.speed = enemy.defaultSpeed;
 
-                foreach (Enemy enemy in enemySpawner.enemies)
+                foreach (Enemy enemy in enemySpawner.enemiesInScene)
                     enemy.maxHealth = enemy.defaultHealth;
 
-                foreach (Enemy enemy in enemiesInTheScene)
-                    enemy.maxHealth = enemy.defaultHealth;
+                //foreach (Enemy enemy in enemiesInTheScene)
+                  //  enemy.maxHealth = enemy.defaultHealth;
 
-                foreach (Tower tower in towersInTheScene)
+                foreach (Tower tower in towerSpawner.towersInScene)
                 {
                     if (tower != null)
                     {
@@ -298,7 +296,7 @@ public class LevelManager : MonoBehaviour
 
 
 
-    private void FindEnemiesInTheScene()
+    /*private void FindEnemiesInTheScene()
     {
         enemiesInTheScene = UnityEngine.Object.FindObjectsOfType<Enemy>();
 
@@ -308,6 +306,7 @@ public class LevelManager : MonoBehaviour
     {
         towersInTheScene = UnityEngine.Object.FindObjectsOfType<Tower>();
     }
+    */
 
 
 }

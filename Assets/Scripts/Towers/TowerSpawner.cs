@@ -41,7 +41,7 @@ public class TowerSpawner : MonoBehaviour
 
     //towers spawned list
     [Header("List of towers:")]
-    [SerializeField] public List<Tower> towers;
+    [SerializeField] public List<Tower> towersInScene;
     //public bool towersInScene = false;
 
     private void Awake()
@@ -106,7 +106,7 @@ public class TowerSpawner : MonoBehaviour
                     if (Input.GetMouseButton(0))
                     {
                         towerIndicator.activateTower();
-                        //towers.Add(towerIndicator);
+                        towersInScene.Add(towerIndicator);
                         towerIndicator = null;
                         spawnerIsActive = false;
                     }

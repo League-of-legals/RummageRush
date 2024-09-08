@@ -8442,7 +8442,6 @@ MonoBehaviour:
   button2: {fileID: 599531730}
   button3: {fileID: 734360280}
   towers: []
-  towersInScene: 0
 --- !u!4 &917219771
 Transform:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public class EventManagerSO : ScriptableObject
 
     public event Action onPauseGame;
     public event Action onResumeGame;
-    public event Action onEnemyDestroyed;
+    //public event Action onEnemyDestroyed;
     public event Action onRandomEvent;
     public event Action onWin;
 
@@ -34,8 +34,11 @@ public class EventManagerSO : ScriptableObject
     {
         onRandomEventTowers?.Invoke();
     }
-    public void EnemyDestroyed()
+
+    /*public void EnemyDestroyed()
     { onEnemyDestroyed?.Invoke(); }
+    */
+
     public void PauseGame()
     {
         onPauseGame?.Invoke();

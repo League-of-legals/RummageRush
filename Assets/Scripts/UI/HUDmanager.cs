@@ -141,7 +141,7 @@ public class HUDmanager : MonoBehaviour
         eventManager.onWin += DisplayWinScreen;
         eventManager.onPauseGame += DisplayPauseScreen;
         eventManager.onResumeGame += HidePauseScreen;
-        //eventManager.onEnemyDestroyed += UpdateMoneyText;
+        eventManager.onEnemyDestroyed += UpdateMoneyText;
         eventManager.onRandomEvent += ShowRandomEventScreen;
 
 
@@ -155,7 +155,7 @@ public class HUDmanager : MonoBehaviour
         eventManager.onWin -= DisplayWinScreen;
         eventManager.onPauseGame -= DisplayPauseScreen;
         eventManager.onResumeGame -= HidePauseScreen;
-        //eventManager.onEnemyDestroyed -= UpdateMoneyText;
+        eventManager.onEnemyDestroyed -= UpdateMoneyText;
         eventManager.onRandomEvent -= ShowRandomEventScreen;
 
 

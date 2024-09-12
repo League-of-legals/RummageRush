@@ -58,7 +58,7 @@ public class Enemy : MonoBehaviour
     [Header("Health:")]
     // health
     [SerializeField] public float maxHealth;
-    [SerializeField] private float currentHealth;
+    [SerializeField] public float currentHealth;
     [SerializeField] HealthBar healthBar;
 
     [Header("Target bookkeeping:")]
@@ -465,11 +465,11 @@ public class Enemy : MonoBehaviour
         animator.ResetTrigger("stopped");
         animator.SetTrigger("die");
         enemySpawner.enemiesInScene.Remove(this);
-        gameSettings.enemiesDestroyed += 1;
         agent.speed = 0f;
         yield return new WaitForSeconds(3.5f);
+        gameSettings.enemiesDestroyed += 1;
         gameSettings.money += rewardCost;
-        //eventManager.EnemyDestroyed();
+        eventManager.EnemyDestroyed();
         Destroy(this.gameObject);
     }
 

@@ -104,7 +104,7 @@ public class Tower : MonoBehaviour
                 // == FIRING PART ==
 
                 // if there's a targeted enemy, then increment the timer every frame
-                if (targetedEnemy)
+                if (targetedEnemy && targetedEnemy.currentHealth > 0)
                 {
                     animator.ResetTrigger("Idle");
                     animator.SetTrigger("Throw");

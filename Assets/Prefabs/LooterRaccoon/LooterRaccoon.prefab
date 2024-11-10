@@ -84,6 +84,8 @@ MonoBehaviour:
   speed: 2
   speedDefault: 2
   speedHauling: 1.5
+  defaultPrice: 20
+  currentPrice: 20
   resourceGain: 80
   resources: 0
   cameraMain: {fileID: 0}
@@ -92,8 +94,9 @@ MonoBehaviour:
   resourcePool: {fileID: 0}
   homebase: {fileID: 0}
   hudManager: {fileID: 0}
+  looterRaccoonSpawner: {fileID: 0}
   enemySlotsLooter: []
-  raccoonHealth: 100
+  raccoonHealth: 50
   currentRaccoonHealth: 0
 --- !u!136 &-2683750370609937168
 CapsuleCollider:

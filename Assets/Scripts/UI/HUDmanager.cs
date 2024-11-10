@@ -67,18 +67,18 @@ public class HUDmanager : MonoBehaviour
             randomEventScreen.SetActive(false);
         }
 
-        /*if (Input.GetKeyUp(KeyCode.M))
+        if (Input.GetKeyUp(KeyCode.M))
         {
             if (audioScript.audioSource.isPlaying)
             {
                 audioScript.StopMusic();
             }
-            if (!audioScript.audioSource.isPlaying)
+            else if (!audioScript.audioSource.isPlaying)
             {
                 audioScript.PlayMusic();
             }
         }
-        */
+        
     }
 
 

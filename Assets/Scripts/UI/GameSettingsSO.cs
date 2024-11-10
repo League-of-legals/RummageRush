@@ -20,6 +20,10 @@ public class GameSettingsSO : ScriptableObject
     public int enemiesSpawned = 0;
     public int enemiesDestroyed = 0;
 
+    public float looterDefaultPrice = 30f;
+    public float looterCurrentPrice = 30f;
+    [SerializeField] public float looterPriceModifier = 10f;
+
 
     private void Awake()
     {

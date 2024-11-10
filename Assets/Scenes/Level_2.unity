@@ -4397,23 +4397,7 @@ MonoBehaviour:
   homebase: {fileID: 1492229688}
   randomEventTimer: 0
   randomEventDuration: 8
-  towerDefault: {fileID: 7792919146501810276, guid: d033d99a0c4bb974399bd392688da662,
-    type: 3}
-  towerFast: {fileID: 7792919146501810276, guid: e8bd764adacfe2d4889928b902054a35,
-    type: 3}
-  towerHeavy: {fileID: 7792919146501810276, guid: 5d4cf07c556382140949fdb5ef2b8577,
-    type: 3}
-  enemyDefault: {fileID: 6206755630489023651, guid: 1d88f7958a3da0e40a627bbd3d27857d,
-    type: 3}
-  enemyFast: {fileID: 6206755630489023651, guid: fd7517dccc2692140ba3f77cc2dbfecc,
-    type: 3}
-  enemyHeavy: {fileID: 6206755630489023651, guid: d3ef5ca093f5da74294b3ad6125ed03f,
-    type: 3}
-  enemy: {fileID: 0}
-  enemiesInTheScene: []
-  towersInTheScene: []
   randomItemDescription: {fileID: 638777095}
-  animator: {fileID: 0}
 --- !u!4 &566989193
 Transform:
   m_ObjectHideFlags: 0
@@ -8441,7 +8425,7 @@ MonoBehaviour:
   button1: {fileID: 1095695561}
   button2: {fileID: 599531730}
   button3: {fileID: 734360280}
-  towers: []
+  towersInScene: []
 --- !u!4 &917219771
 Transform:
   m_ObjectHideFlags: 0
@@ -13737,7 +13721,7 @@ MonoBehaviour:
   paths:
   - {fileID: 1407337519}
   - {fileID: 1463874636}
-  enemies: []
+  enemiesInScene: []
   enemyDefault: {fileID: 6206755630489023651, guid: 1d88f7958a3da0e40a627bbd3d27857d,
     type: 3}
   enemyFast: {fileID: 6206755630489023651, guid: fd7517dccc2692140ba3f77cc2dbfecc,
@@ -13747,6 +13731,7 @@ MonoBehaviour:
   newEnemy: {fileID: 0}
   towerSpawner: {fileID: 917219770}
   gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
+  levelManager: {fileID: 0}
 --- !u!4 &1665862330
 Transform:
   m_ObjectHideFlags: 0
@@ -15300,6 +15285,7 @@ MonoBehaviour:
     type: 3}
   cameraMain: {fileID: 590119023}
   newRaccoon: {fileID: 0}
+  LootersInScene: []
   paths:
   - {fileID: 555164198}
   - {fileID: 216506324}
@@ -15307,6 +15293,7 @@ MonoBehaviour:
   resourcePool: {fileID: 1909863804}
   homebase: {fileID: 1492229687}
   hudManager: {fileID: 1918152486}
+  gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
 --- !u!1 &1821179881
 GameObject:
   m_ObjectHideFlags: 0
@@ -15543,7 +15530,6 @@ GameObject:
   - component: {fileID: 1909863806}
   - component: {fileID: 1909863805}
   - component: {fileID: 1909863809}
-  - component: {fileID: 1909863810}
   m_Layer: 10
   m_Name: ResourcePool
   m_TagString: ResourcePool
@@ -15664,18 +15650,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1909863810
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1909863804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af95faca364598c44a99ed178c4ab8b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1910681738
 GameObject:
   m_ObjectHideFlags: 0

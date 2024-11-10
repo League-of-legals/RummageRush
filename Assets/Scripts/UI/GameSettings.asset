@@ -15,8 +15,11 @@ MonoBehaviour:
   money: 45
   damageDealt: 0
   currentGameState: 1
-  previousGameState: 1
+  previousGameState: 0
   eventManager: {fileID: 11400000, guid: 460f86889e4558c4794133662cbd2532, type: 2}
   enemy: {fileID: 0}
   enemiesSpawned: 7
   enemiesDestroyed: 0
+  looterDefaultPrice: 30
+  looterCurrentPrice: 30
+  looterPriceModifier: 10

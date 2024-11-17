@@ -13,8 +13,9 @@ public class LooterRaccoon : MonoBehaviour
     public float speedHauling = 1.5f;
     private int numberOfWaypoints;
     private bool hasLoot;
-    [SerializeField] public float defaultPrice = 20f;
-    [SerializeField] public float currentPrice = 20f;
+
+    //[SerializeField] public float defaultPrice = 20f;
+    //[SerializeField] public float currentPrice = 20f;
 
     [SerializeField] public float resourceGain = 50f;
     [SerializeField] public float resources;    
@@ -50,10 +51,9 @@ public class LooterRaccoon : MonoBehaviour
     {
         numberOfWaypoints = path.GetNumberOfWaypoints();
         hasLoot = false;
-        //cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+      
         resourceLoadIndicatorUI = GetComponentInChildren<ResourceLoadIndicatorUI>();
-        //resourcePool = GameObject.FindGameObjectWithTag("ResourcePool");
-        //homebase = GameObject.FindGameObjectWithTag("Homebase");
+
         resourceLoadIndicatorUI.UpdateLoadText(" ");
 
         currentRaccoonHealth = raccoonHealth;
@@ -150,9 +150,16 @@ public class LooterRaccoon : MonoBehaviour
 
         if (currentRaccoonHealth <= 0)
         {
-            //currentPrice = defaultPrice;
-            gameSettings.looterCurrentPrice = gameSettings.looterDefaultPrice;
+            
             looterRaccoonSpawner.LootersInScene.Remove(this);
+            if (looterRaccoonSpawner.LootersInScene.Count == 0f)
+            { gameSettings.looterCurrentPrice = 0; }
+            else
+            {
+                gameSettings.looterCurrentPrice = gameSettings.looterDefaultPrice +
+                    (looterRaccoonSpawner.LootersInScene.Count * gameSettings.looterPriceModifier);
+            }
+
             Destroy(this.gameObject);
         }
     }

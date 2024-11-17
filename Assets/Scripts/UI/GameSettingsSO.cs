@@ -22,7 +22,7 @@ public class GameSettingsSO : ScriptableObject
 
     public float looterDefaultPrice = 30f;
     public float looterCurrentPrice = 30f;
-    [SerializeField] public float looterPriceModifier = 10f;
+    [SerializeField] public float looterPriceModifier = 15f;
 
 
     private void Awake()

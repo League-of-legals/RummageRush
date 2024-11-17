@@ -26,9 +26,12 @@ public class LooterRaccoonSpawner : MonoBehaviour
     private void SpawnLooter()
     {
         if (gameSettings.currentGameState == GameStates.inGame)
-        {
-            if (gameSettings.money >= gameSettings.looterCurrentPrice)
-            {
+        { if (LootersInScene.Count == 0f)
+            { gameSettings.looterCurrentPrice = 0; }
+               
+           if (gameSettings.money >= gameSettings.looterCurrentPrice)
+                { 
+
                 newRaccoon = Instantiate(looterRaccoon, transform.position, Quaternion.identity);
                 newRaccoon.SetLooterPath(paths[(int)Random.Range(0, paths.Count)]);
                 newRaccoon.cameraMain = cameraMain;
@@ -38,8 +41,12 @@ public class LooterRaccoonSpawner : MonoBehaviour
                 newRaccoon.gameSettings = gameSettings;
                 newRaccoon.looterRaccoonSpawner = this;
                 LootersInScene.Add(newRaccoon);
-                gameSettings.looterCurrentPrice = gameSettings.looterDefaultPrice + 
-                    (LootersInScene.Count * gameSettings.looterPriceModifier);
+                gameSettings.money -= gameSettings.looterCurrentPrice;
+                {gameSettings.looterCurrentPrice = gameSettings.looterDefaultPrice + 
+                    (LootersInScene.Count * gameSettings.looterPriceModifier); }
+
+                     
+                
 
             }
         }

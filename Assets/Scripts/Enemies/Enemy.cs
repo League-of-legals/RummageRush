@@ -84,6 +84,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] GameSettingsSO gameSettings;
     [SerializeField] EventManagerSO eventManager;
     [SerializeField] Animator animator;
+    [SerializeField] public Camera cameraMain;
 
     [SerializeField] Homebase homebase;
 

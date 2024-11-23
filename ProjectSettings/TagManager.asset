@@ -21,7 +21,7 @@ TagManager:
   - ResourcePool
   - Looter
   - Homebase
-  - 
+  - LooterResources
   - 
   - 
   - 
@@ -43,4 +43,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: LooterUI
+    uniqueID: 1368491017
+    locked: 0
+  - name: UI
+    uniqueID: 2916904321
     locked: 0

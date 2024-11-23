@@ -6,20 +6,27 @@ using UnityEngine;
 
 public class LooterRaccoon : MonoBehaviour
 {
+    [Header("Pathfinding:")]
     [SerializeField] public LooterRaccoonPath path;
     private int currentTargetWaypoint;
+    private int numberOfWaypoints;
+
+    [Header("Speed:")]
     public float speed = 2.5f;
     public float speedDefault = 2.5f;
     public float speedHauling = 1.5f;
-    private int numberOfWaypoints;
-    private bool hasLoot;
 
-    //[SerializeField] public float defaultPrice = 20f;
-    //[SerializeField] public float currentPrice = 20f;
-
+    [Header("Looting:")]
     [SerializeField] public float resourceGain = 50f;
-    [SerializeField] public float resources;    
-    
+    [SerializeField] public float resources;
+    private bool hasLoot; 
+
+
+    [Header("Health:")]
+    [SerializeField] public float raccoonHealth = 30f;
+    public float currentRaccoonHealth;
+
+    [Header("References:")]
     [SerializeField] public Camera cameraMain;
 
     [SerializeField] public GameSettingsSO gameSettings;
@@ -33,9 +40,7 @@ public class LooterRaccoon : MonoBehaviour
 
     [SerializeField] List<EnemySlotLooter> enemySlotsLooter;
 
-    // health
-    [SerializeField] public float raccoonHealth = 30f;
-    public float currentRaccoonHealth;
+
 
     private void Awake()
     {
@@ -53,7 +58,8 @@ public class LooterRaccoon : MonoBehaviour
         hasLoot = false;
       
         resourceLoadIndicatorUI = GetComponentInChildren<ResourceLoadIndicatorUI>();
-
+        //resourceLoadIndicatorUI.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+        //resourceLoadIndicatorUI.GetComponentInChildren<Canvas>().worldCamera = Camera.main;
         resourceLoadIndicatorUI.UpdateLoadText(" ");
 
         currentRaccoonHealth = raccoonHealth;
@@ -79,6 +85,8 @@ public class LooterRaccoon : MonoBehaviour
 
         if (hasLoot)
         {
+      
+
             if (Vector3.Distance(transform.position, path.GetWaypoint(currentTargetWaypoint).position) < 0.1f
             && currentTargetWaypoint > 0f)
             {

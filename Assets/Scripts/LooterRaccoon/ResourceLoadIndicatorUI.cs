@@ -11,10 +11,12 @@ public class ResourceLoadIndicatorUI : MonoBehaviour
     private void Start()
     {
         looterRaccoon = GetComponentInParent<LooterRaccoon>();
+
     }
 
     public void UpdateLoadText(string moneyText)
     {
         resourceLoadText.text = moneyText;
     }
+ 
 }

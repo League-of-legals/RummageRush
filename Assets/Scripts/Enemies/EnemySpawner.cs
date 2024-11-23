@@ -31,6 +31,7 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] GameSettingsSO gameSettings;
     [SerializeField] LevelManager levelManager;
+    [SerializeField] public Camera cameraMain;
 
     private void SpawnEnemy(Enemy enemyToSpawn, EnemyPath chosenPath)
     {
@@ -39,6 +40,7 @@ public class EnemySpawner : MonoBehaviour
         newEnemy.SetEnemyPath(chosenPath);      // set path for the enemy
         // newEnemy.towerSpawner = towerSpawner;   // get references for the tower spawner
         newEnemy.enemySpawner = this;
+        newEnemy.cameraMain = cameraMain;
         enemiesInScene.Add(newEnemy);              // add the enemy to the list of enemies
 
     }

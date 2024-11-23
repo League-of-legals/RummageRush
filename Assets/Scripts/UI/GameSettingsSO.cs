@@ -7,16 +7,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameSettings", menuName = "Managers/Game Settings")]
 public class GameSettingsSO : ScriptableObject
 {
+    [SerializeField] public GameStates currentGameState;
+    [SerializeField] public GameStates previousGameState;
 
     public float money = 45f;
 
     public float damageDealt = 0f;
-
-    [SerializeField] public GameStates currentGameState;
-    [SerializeField] public GameStates previousGameState;
-    [SerializeField] EventManagerSO eventManager;
-    public Enemy enemy;
-
     public int enemiesSpawned = 0;
     public int enemiesDestroyed = 0;
 
@@ -24,6 +20,9 @@ public class GameSettingsSO : ScriptableObject
     public float looterCurrentPrice = 30f;
     [SerializeField] public float looterPriceModifier = 15f;
 
+    [Header("References:")]
+    [SerializeField] EventManagerSO eventManager;
+    public Enemy enemy;
 
     private void Awake()
     {

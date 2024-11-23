@@ -13732,6 +13732,7 @@ MonoBehaviour:
   towerSpawner: {fileID: 917219770}
   gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
   levelManager: {fileID: 0}
+  cameraMain: {fileID: 590119023}
 --- !u!4 &1665862330
 Transform:
   m_ObjectHideFlags: 0
@@ -15281,17 +15282,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c03ccda39691c61498b1cae9efe666e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  looterRaccoon: {fileID: -5248333223227804391, guid: 2fe2357cdc872fe46a1c9587d1be6fc1,
-    type: 3}
-  cameraMain: {fileID: 590119023}
-  newRaccoon: {fileID: 0}
-  LootersInScene: []
   paths:
   - {fileID: 555164198}
   - {fileID: 216506324}
+  looterRaccoon: {fileID: -5248333223227804391, guid: 2fe2357cdc872fe46a1c9587d1be6fc1,
+    type: 3}
+  newRaccoon: {fileID: 0}
+  LootersInScene: []
+  onCooldown: 0
+  cooldownTimer: 0
+  cooldownTime: 5
   buttonSpawn: {fileID: 1910681740}
   resourcePool: {fileID: 1909863804}
   homebase: {fileID: 1492229687}
+  cameraMain: {fileID: 590119023}
   hudManager: {fileID: 1918152486}
   gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
 --- !u!1 &1821179881
@@ -15713,7 +15717,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
     m_PressedColor: {r: 0.7647059, g: 0.7411765, b: 0.59607846, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.7075472, g: 0.6040851, b: 0.6040851, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -16078,7 +16082,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &1919524343
 GameObject:

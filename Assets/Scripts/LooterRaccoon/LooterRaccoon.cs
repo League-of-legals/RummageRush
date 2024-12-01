@@ -19,12 +19,20 @@ public class LooterRaccoon : MonoBehaviour
     [Header("Looting:")]
     [SerializeField] public float resourceGain = 50f;
     [SerializeField] public float resources;
-    private bool hasLoot; 
+    private bool hasLoot;
 
 
     [Header("Health:")]
     [SerializeField] public float raccoonHealth = 30f;
     public float currentRaccoonHealth;
+
+    [Header("Taking Damage:")]
+    [SerializeField] float takingDamageCooldown = 2f;
+    [SerializeField] float takingDamageCooldownTimer;
+    //[SerializeField] float takingDamageTimer;
+    //[SerializeField] float takingDamageDuration = 0.5f;
+    public bool isBeingAttacked = false;
+    public bool isAttackable = true;
 
     [Header("References:")]
     [SerializeField] public Camera cameraMain;
@@ -44,6 +52,7 @@ public class LooterRaccoon : MonoBehaviour
 
     private void Awake()
     {
+       
         enemySlotsLooter = new List<EnemySlotLooter>();
         foreach (Transform t in transform)
             if (t.name == "EnemySlotsLooter")
@@ -53,7 +62,9 @@ public class LooterRaccoon : MonoBehaviour
 
 
     private void Start()
-    {
+    { 
+
+        isAttackable = true;
         numberOfWaypoints = path.GetNumberOfWaypoints();
         hasLoot = false;
       
@@ -68,6 +79,8 @@ public class LooterRaccoon : MonoBehaviour
 
     private void Update()
     {
+                      
+                
         transform.LookAt(path.GetWaypoint(currentTargetWaypoint));
 
         transform.position = Vector3.MoveTowards(transform.position, path.GetWaypoint(currentTargetWaypoint).position,
@@ -94,7 +107,16 @@ public class LooterRaccoon : MonoBehaviour
             }
         }
 
+      /*  if (!isAttackable)
+                { 
+                    takingDamageCooldownTimer += Time.deltaTime;   
+                    if(takingDamageCooldownTimer < takingDamageCooldown)
+                    { return; }
+                    takingDamageCooldownTimer = 0f;
+                    isAttackable = true;
 
+                } 
+      */
 
     }
 
@@ -151,26 +173,33 @@ public class LooterRaccoon : MonoBehaviour
         speed = speedDefault;
     }
 
-
     public void TakeDamage(float enemyDamage)
-    {
-        currentRaccoonHealth -= enemyDamage;
-
-        if (currentRaccoonHealth <= 0)
-        {
+    { 
+          currentRaccoonHealth -= enemyDamage;
+          //speed = 0f;
+          if (currentRaccoonHealth <= 0)
+          {
             
-            looterRaccoonSpawner.LootersInScene.Remove(this);
-            if (looterRaccoonSpawner.LootersInScene.Count == 0f)
-            { gameSettings.looterCurrentPrice = 0; }
-            else
-            {
-                gameSettings.looterCurrentPrice = gameSettings.looterDefaultPrice +
+          looterRaccoonSpawner.LootersInScene.Remove(this);
+          if (looterRaccoonSpawner.LootersInScene.Count == 0f)
+          { gameSettings.looterCurrentPrice = 0; }
+          else
+          {
+              gameSettings.looterCurrentPrice = gameSettings.looterDefaultPrice +
                     (looterRaccoonSpawner.LootersInScene.Count * gameSettings.looterPriceModifier);
-            }
+          }
 
-            Destroy(this.gameObject);
-        }
+          Destroy(this.gameObject);
+          }        
+      //yield return new WaitForSeconds(0.5f);
+                //if (hasLoot)
+                //{ speed = speedHauling; }
+                //else { speed = speedDefault; }
     }
+
+
+
+    
 
     public bool GetEnemySlotLooter(Enemy enemy, out Transform transform)
     {
@@ -221,6 +250,8 @@ public class LooterRaccoon : MonoBehaviour
         {
             this.enemy = enemy;
         }
+
+        
     }
 
 }

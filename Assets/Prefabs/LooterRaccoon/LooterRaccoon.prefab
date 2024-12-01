@@ -84,10 +84,14 @@ MonoBehaviour:
   speed: 2
   speedDefault: 2
   speedHauling: 1.5
-  resourceGain: 80
+  resourceGain: 40
   resources: 0
   raccoonHealth: 50
   currentRaccoonHealth: 0
+  takingDamageCooldown: 2
+  takingDamageCooldownTimer: 0
+  isBeingAttacked: 0
+  isAttackable: 1
   cameraMain: {fileID: 0}
   gameSettings: {fileID: 11400000, guid: d7d743529fc20304a828928101bf520b, type: 2}
   resourceLoadIndicatorUI: {fileID: 0}

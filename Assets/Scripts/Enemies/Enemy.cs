@@ -8,7 +8,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
 
-    private enum EnemyState
+    public enum EnemyState
     {
         Stopped,
         Traveling,
@@ -335,7 +335,7 @@ public class Enemy : MonoBehaviour
                     
                 }
 
-                if (targetedRaccoon)
+                if (targetedRaccoon && targetedRaccoon.isAttackable)
                 {
                     transform.LookAt(targetedRaccoon.transform);
                     animator.ResetTrigger("walk");
@@ -353,6 +353,8 @@ public class Enemy : MonoBehaviour
                         }
                         damageDealingTimer = 0;
                         targetedRaccoon.TakeDamage(enemyDamage);
+                        //targetedRaccoon.isAttackable = false;
+
                     }
 
                 }

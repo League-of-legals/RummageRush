@@ -19,16 +19,18 @@ public class LooterRaccoon : MonoBehaviour
     [Header("Looting:")]
     [SerializeField] public float resourceGain = 50f;
     [SerializeField] public float resources;
-    private bool hasLoot;
+    public bool hasLoot;
 
+    [Header("Commands:")]
+    public bool recalled = false;
 
     [Header("Health:")]
     [SerializeField] public float raccoonHealth = 30f;
     public float currentRaccoonHealth;
 
     [Header("Taking Damage:")]
-    [SerializeField] float takingDamageCooldown = 2f;
-    [SerializeField] float takingDamageCooldownTimer;
+    //[SerializeField] float takingDamageCooldown = 2f;
+    //[SerializeField] float takingDamageCooldownTimer;
     //[SerializeField] float takingDamageTimer;
     //[SerializeField] float takingDamageDuration = 0.5f;
     public bool isBeingAttacked = false;
@@ -67,6 +69,7 @@ public class LooterRaccoon : MonoBehaviour
         isAttackable = true;
         numberOfWaypoints = path.GetNumberOfWaypoints();
         hasLoot = false;
+        recalled = false;
       
         resourceLoadIndicatorUI = GetComponentInChildren<ResourceLoadIndicatorUI>();
         //resourceLoadIndicatorUI.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
@@ -88,8 +91,15 @@ public class LooterRaccoon : MonoBehaviour
 
         if (!hasLoot)
         {
-
-            if (Vector3.Distance(transform.position, path.GetWaypoint(currentTargetWaypoint).position) < 0.1f
+            if (recalled)
+            {
+                if (Vector3.Distance(transform.position, path.GetWaypoint(currentTargetWaypoint).position) < 0.1f
+            && currentTargetWaypoint > 0f)
+                {
+                    currentTargetWaypoint--;
+                }
+            }
+            else if (Vector3.Distance(transform.position, path.GetWaypoint(currentTargetWaypoint).position) < 0.1f
                 && currentTargetWaypoint < numberOfWaypoints - 1f)
             {
                 currentTargetWaypoint++;
@@ -98,8 +108,7 @@ public class LooterRaccoon : MonoBehaviour
 
         if (hasLoot)
         {
-      
-
+            
             if (Vector3.Distance(transform.position, path.GetWaypoint(currentTargetWaypoint).position) < 0.1f
             && currentTargetWaypoint > 0f)
             {
@@ -122,9 +131,9 @@ public class LooterRaccoon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {            
-        Debug.Log($"something touched me!");
+        //Debug.Log($"something touched me!");
 
-        if (other.gameObject == resourcePool && !hasLoot)
+        if (other.gameObject == resourcePool && !hasLoot && !recalled)
         {
             StartCoroutine(DrawResources());
         }
@@ -203,8 +212,6 @@ public class LooterRaccoon : MonoBehaviour
 
     public bool GetEnemySlotLooter(Enemy enemy, out Transform transform)
     {
-        // This method allows the tower to tell an
-        // attacking enemy where to go and stand
 
         // Is the enemy already occupying a slot?
         foreach (EnemySlotLooter slot in enemySlotsLooter)

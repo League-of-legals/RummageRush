@@ -21,6 +21,8 @@ public class LooterRaccoonSpawner : MonoBehaviour
 
     [Header("References:")]
     [SerializeField] Button buttonSpawn;
+    [SerializeField] Button buttonRecall;
+    [SerializeField] Button buttonSendOut;
     [SerializeField] GameObject resourcePool;
     [SerializeField] GameObject homebase;
     [SerializeField] Camera cameraMain;
@@ -81,7 +83,20 @@ public class LooterRaccoonSpawner : MonoBehaviour
     private void OnEnable()
     {
         buttonSpawn.onClick.AddListener(delegate { SpawnLooter(); }) ;
+        buttonRecall.onClick.AddListener(delegate { RecallLooters(); });
+        buttonSendOut.onClick.AddListener(delegate { SendOutLooters(); });
+
     }
 
+    private void RecallLooters()
+    {
+        foreach (LooterRaccoon looter in LootersInScene)
+            looter.recalled = true;
+    }
 
+    private void SendOutLooters()
+    {
+        foreach (LooterRaccoon looter in LootersInScene)
+            looter.recalled = false;
+    }
 }

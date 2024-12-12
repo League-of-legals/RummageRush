@@ -53,6 +53,7 @@ public class HUDmanager : MonoBehaviour
         towerDefaultCost.text = $"{towerDefault.towerCost}";
         towerFastCost.text = $"{towerFast.towerCost}";
         towerHeavyCost.text = $"{towerHeavy.towerCost}";
+        audioScript.audioSource.Play(); 
     }
 
     private void Update()
@@ -69,13 +70,13 @@ public class HUDmanager : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.M))
         {
-            if (audioScript.audioSource.isPlaying)
+            if (!audioScript.audioSource.mute)
             {
-                audioScript.StopMusic();
+                audioScript.audioSource.mute = true;
             }
-            else if (!audioScript.audioSource.isPlaying)
+            else if (audioScript.audioSource.mute)
             {
-                audioScript.PlayMusic();
+                audioScript.audioSource.mute = false;
             }
         }
         
@@ -112,13 +113,13 @@ public class HUDmanager : MonoBehaviour
 
         buttonMute.onClick.AddListener(() =>
         {
-            if (audioScript.audioSource.isPlaying)
+            if (!audioScript.audioSource.mute)
             {
-                audioScript.StopMusic();
+                audioScript.audioSource.mute = true;
             }
-            else 
+            else if (audioScript.audioSource.mute)
             {
-                audioScript.PlayMusic();
+                audioScript.audioSource.mute = false;
             }
         });
 

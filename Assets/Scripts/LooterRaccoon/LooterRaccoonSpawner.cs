@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,8 @@ public class LooterRaccoonSpawner : MonoBehaviour
     [SerializeField] HUDmanager hudManager;
     [SerializeField] GameSettingsSO gameSettings;
 
+    [SerializeField] TMP_Text looterPriceText;
+
     private void SpawnLooter() //spawn a Looter Raccoon on given conditions
     {
         if (gameSettings.currentGameState == GameStates.inGame)
@@ -49,8 +52,10 @@ public class LooterRaccoonSpawner : MonoBehaviour
                 newRaccoon.looterRaccoonSpawner = this;
                 LootersInScene.Add(newRaccoon);
                 gameSettings.money -= gameSettings.looterCurrentPrice;
+                hudManager.UpdateMoneyText();
                 {gameSettings.looterCurrentPrice = gameSettings.looterDefaultPrice + 
                     (LootersInScene.Count * gameSettings.looterPriceModifier); }
+                UpdateLooterPrice();
 
                      
                 
@@ -63,6 +68,7 @@ public class LooterRaccoonSpawner : MonoBehaviour
     {
         cooldownTimer = 0;
         SpawnLooter();
+
     }
 
     private void Update()
@@ -98,5 +104,10 @@ public class LooterRaccoonSpawner : MonoBehaviour
     {
         foreach (LooterRaccoon looter in LootersInScene)
             looter.recalled = false;
+    }
+
+    public void UpdateLooterPrice()
+    {
+        looterPriceText.text = $"x{gameSettings.looterCurrentPrice}";
     }
 }

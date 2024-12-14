@@ -27,6 +27,7 @@ public class LooterRaccoon : MonoBehaviour
     [Header("Health:")]
     [SerializeField] public float raccoonHealth = 30f;
     public float currentRaccoonHealth;
+    [SerializeField] HealthBar healthBar;
 
     [Header("Taking Damage:")]
     //[SerializeField] float takingDamageCooldown = 2f;
@@ -185,18 +186,25 @@ public class LooterRaccoon : MonoBehaviour
     public void TakeDamage(float enemyDamage)
     { 
           currentRaccoonHealth -= enemyDamage;
-          //speed = 0f;
-          if (currentRaccoonHealth <= 0)
+        healthBar.UpdateHealthBar(currentRaccoonHealth, raccoonHealth);
+        //speed = 0f;
+        if (currentRaccoonHealth <= 0)
           {
             
           looterRaccoonSpawner.LootersInScene.Remove(this);
           if (looterRaccoonSpawner.LootersInScene.Count == 0f)
-          { gameSettings.looterCurrentPrice = 0; }
+          { gameSettings.looterCurrentPrice = 0;
+                
+
+
+            }
           else
           {
               gameSettings.looterCurrentPrice = gameSettings.looterDefaultPrice +
                     (looterRaccoonSpawner.LootersInScene.Count * gameSettings.looterPriceModifier);
           }
+          
+          looterRaccoonSpawner.UpdateLooterPrice();
 
           Destroy(this.gameObject);
           }        

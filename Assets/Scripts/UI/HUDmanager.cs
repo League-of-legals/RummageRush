@@ -50,9 +50,9 @@ public class HUDmanager : MonoBehaviour
             pauseScreen.SetActive(false);
         }
 
-        towerDefaultCost.text = $"{towerDefault.towerCost}";
-        towerFastCost.text = $"{towerFast.towerCost}";
-        towerHeavyCost.text = $"{towerHeavy.towerCost}";
+        towerDefaultCost.text = $"x{towerDefault.towerCost}";
+        towerFastCost.text = $"x{towerFast.towerCost}";
+        towerHeavyCost.text = $"x{towerHeavy.towerCost}";
         audioScript.audioSource.Play(); 
     }
 

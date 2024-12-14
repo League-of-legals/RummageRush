@@ -93,7 +93,7 @@ public class LevelManager : MonoBehaviour
         }
 
 
-        if (gameSettings.currentGameState== GameStates.inTutorial)
+        /*if (gameSettings.currentGameState== GameStates.inTutorial)
         {
             if (Input.anyKeyDown)
             {
@@ -104,6 +104,7 @@ public class LevelManager : MonoBehaviour
                 Time.timeScale = 1f;
             }
         }
+        */
 
         else if(gameSettings.currentGameState == GameStates.inGame)
         {

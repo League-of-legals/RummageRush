@@ -114,6 +114,7 @@ public class Enemy : MonoBehaviour
     }
     private void Update()
     {
+        
         // If we aren't in game, then update fails, and we don't do anything
         if (gameSettings.currentGameState != GameStates.inGame)
         {

@@ -19,6 +19,8 @@ public class HUDmanager : MonoBehaviour
 
     [SerializeField] GameObject gameOverScreen;
     [SerializeField] GameObject tutorialScreen;
+    [SerializeField] TutorialLevel1 tutorialPanel;
+    public int numberOfTutorialScreens;
     [SerializeField] GameObject pauseScreen;
     [SerializeField] GameObject controlsScreen;
     [SerializeField] public GameObject randomEventScreen;
@@ -53,7 +55,11 @@ public class HUDmanager : MonoBehaviour
         towerDefaultCost.text = $"x{towerDefault.towerCost}";
         towerFastCost.text = $"x{towerFast.towerCost}";
         towerHeavyCost.text = $"x{towerHeavy.towerCost}";
-        audioScript.audioSource.Play(); 
+        audioScript.audioSource.Play();
+        Debug.Log($"{tutorialPanel.screens.Length}");
+        tutorialPanel.currentTutorialScreen = 1;
+
+
     }
 
     private void Update()
@@ -77,6 +83,22 @@ public class HUDmanager : MonoBehaviour
             else if (audioScript.audioSource.mute)
             {
                 audioScript.audioSource.mute = false;
+            }
+        }
+
+        if(tutorialScreen.activeInHierarchy == true)
+        {
+            if(Input.GetMouseButtonUp(0))
+            {
+                tutorialPanel.CycleThroughTutorialScreens();
+                if (tutorialPanel.currentTutorialScreen >= tutorialPanel.screens.Length)
+                {
+                    gameSettings.previousGameState = gameSettings.currentGameState;
+                    HideTutorial();
+                    eventManager.ResumeGame();
+                    gameSettings.currentGameState = GameStates.inGame;
+                    Time.timeScale = 1f;
+                }
             }
         }
         

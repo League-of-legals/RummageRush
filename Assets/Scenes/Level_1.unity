@@ -3481,6 +3481,8 @@ MonoBehaviour:
     type: 3}
   gameOverScreen: {fileID: 186447603}
   tutorialScreen: {fileID: 422610432}
+  tutorialPanel: {fileID: 1456750069}
+  numberOfTutorialScreens: 0
   pauseScreen: {fileID: 303449668}
   controlsScreen: {fileID: 1741970100}
   randomEventScreen: {fileID: 232315402}
@@ -11561,6 +11563,7 @@ GameObject:
   - component: {fileID: 1456750066}
   - component: {fileID: 1456750068}
   - component: {fileID: 1456750067}
+  - component: {fileID: 1456750069}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -11607,7 +11610,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 69bb3f14bca7b5348aaea8d3857f5a4b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6422618053ae3f24ca1dd4f720f496e3, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -11625,6 +11628,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1456750065}
   m_CullTransparentMesh: 1
+--- !u!114 &1456750069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456750065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a336258505bd7f14fb44c4cf987c1324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screens:
+  - {fileID: 21300000, guid: 6422618053ae3f24ca1dd4f720f496e3, type: 3}
+  - {fileID: 21300000, guid: df1c2212a4a3fbe45a877f4b480a385b, type: 3}
+  - {fileID: 21300000, guid: 09a65a5c0a780f44caa6bd293a3aa962, type: 3}
+  - {fileID: 21300000, guid: d9c0e38e572ad1e49b7f4f69f7c9304e, type: 3}
+  - {fileID: 21300000, guid: 7ce8ff7bd2e92fe489cb437eb91c70b2, type: 3}
+  - {fileID: 21300000, guid: b1c133a8454e45545a65c4262cdd3333, type: 3}
+  - {fileID: 21300000, guid: e3066600d8f915c4591b055cb43864c9, type: 3}
+  - {fileID: 21300000, guid: b8fbf1d3f857b224ea4cc76f1f09be5b, type: 3}
+  - {fileID: 21300000, guid: 85c9bea8e42a4d64290ca8c99e8ffa33, type: 3}
+  - {fileID: 21300000, guid: 8af69c53ca942db4dbfa6b0c330ea3a7, type: 3}
+  - {fileID: 21300000, guid: 74abbd4c2d684454fa8a935cd0ae8fc1, type: 3}
+  - {fileID: 21300000, guid: 164cc4d8ee53c8a42b59e3a0b4e627c9, type: 3}
+  - {fileID: 21300000, guid: d2953982247a48c43aeba96867f22248, type: 3}
+  currentTutorialScreen: 0
 --- !u!1 &1462919452
 GameObject:
   m_ObjectHideFlags: 0

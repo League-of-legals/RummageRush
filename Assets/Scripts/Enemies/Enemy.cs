@@ -463,16 +463,17 @@ public class Enemy : MonoBehaviour
     }
 
     IEnumerator DeathSequence()
-    {
+    {    
+        agent.speed = 0f;
         animator.ResetTrigger("walk");
         animator.ResetTrigger("punch");
         animator.ResetTrigger("stopped");
         animator.SetTrigger("die");
         enemySpawner.enemiesInScene.Remove(this);
-        agent.speed = 0f;
+  
         yield return new WaitForSeconds(3.5f);
         gameSettings.enemiesDestroyed += 1;
-        gameSettings.money += rewardCost;
+        //gameSettings.money += rewardCost;
         eventManager.EnemyDestroyed();
         Destroy(this.gameObject);
     }

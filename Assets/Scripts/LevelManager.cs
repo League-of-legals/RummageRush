@@ -72,16 +72,6 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    /* private void OnEnable()
-    {
-        eventManager.onEnemyDestroyed += UpdateKillCount;
-    }
-
-    private void OnDisable()
-    {
-        eventManager.onEnemyDestroyed -= UpdateKillCount;
-    } */
-
 
     private void Update()
     {
@@ -173,8 +163,7 @@ public class LevelManager : MonoBehaviour
 
             if (randomEventTimer < randomEventDuration)
             {
-                //FindEnemiesInTheScene();
-                //FindTowersInTheScene();
+               
                 gameSettings.damageDealt = 0;
 
                 if (randomEvent.itemName == "Banana peel")
@@ -254,7 +243,6 @@ public class LevelManager : MonoBehaviour
             {
                 randomEvent.item = null;
                 randomEvent.itemName = null;
-                //FindEnemiesInTheScene();
                 eventManager.RandomEventStop();
 
                 foreach (Enemy enemy in enemySpawner.enemiesInScene)
@@ -290,24 +278,13 @@ public class LevelManager : MonoBehaviour
          
     }
 
+   /*
     private void UpdateKillCount()
     {
         gameSettings.enemiesDestroyed += 1;
     }
+   */
 
-
-
-    /*private void FindEnemiesInTheScene()
-    {
-        enemiesInTheScene = UnityEngine.Object.FindObjectsOfType<Enemy>();
-
-    }
-
-    private void FindTowersInTheScene()
-    {
-        towersInTheScene = UnityEngine.Object.FindObjectsOfType<Tower>();
-    }
-    */
 
 
 }

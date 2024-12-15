@@ -38,6 +38,7 @@ public class LooterRaccoon : MonoBehaviour
     public bool isAttackable = true;
 
     [Header("References:")]
+    [SerializeField] Animator animator;
     [SerializeField] public Camera cameraMain;
 
     [SerializeField] public GameSettingsSO gameSettings;
@@ -78,12 +79,14 @@ public class LooterRaccoon : MonoBehaviour
         resourceLoadIndicatorUI.UpdateLoadText(" ");
 
         currentRaccoonHealth = raccoonHealth;
+        animator.ResetTrigger("rummage");
+        animator.SetTrigger("run");
     }
 
 
     private void Update()
     {
-                      
+        
                 
         transform.LookAt(path.GetWaypoint(currentTargetWaypoint));
 
@@ -136,11 +139,15 @@ public class LooterRaccoon : MonoBehaviour
 
         if (other.gameObject == resourcePool && !hasLoot && !recalled)
         {
+            animator.ResetTrigger("run");
+            animator.SetTrigger("rummage");
             StartCoroutine(DrawResources());
         }
 
         if (other.gameObject == homebase && hasLoot)
         {
+            animator.ResetTrigger("run");
+            animator.SetTrigger("rummage");
             StartCoroutine(UnloadResources());
         }
 
@@ -153,6 +160,8 @@ public class LooterRaccoon : MonoBehaviour
 
    IEnumerator DrawResources()
     {
+        
+
         yield return new WaitForSeconds(0.5f);
         speed = 0f;
         yield return new WaitForSeconds(1f);
@@ -167,10 +176,13 @@ public class LooterRaccoon : MonoBehaviour
         yield return new WaitForSeconds(1f);
         speed = speedHauling;
         hasLoot = true;
+        animator.ResetTrigger("rummage");
+        animator.SetTrigger("run");
     }
 
     IEnumerator UnloadResources()
     {
+
         Debug.Log($"Unloading...");
         yield return new WaitForSeconds(1f);
         speed = 0f;
@@ -181,6 +193,8 @@ public class LooterRaccoon : MonoBehaviour
         resources = 0;
         hasLoot = false;
         speed = speedDefault;
+        animator.ResetTrigger("rummage");
+        animator.SetTrigger("run");
     }
 
     public void TakeDamage(float enemyDamage)

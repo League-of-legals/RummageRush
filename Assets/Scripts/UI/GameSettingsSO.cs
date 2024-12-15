@@ -37,7 +37,7 @@ public class GameSettingsSO : ScriptableObject
 
     public void ResetMoney()
     {
-        money = 45f;
+        money = 60f;
     }
 
     public void ResetDamageDealt()

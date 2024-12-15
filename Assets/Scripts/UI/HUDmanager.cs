@@ -213,6 +213,7 @@ public class HUDmanager : MonoBehaviour
         gameSettings.previousGameState = gameSettings.currentGameState;
         gameOverScreen.SetActive(true);
         gameSettings.currentGameState = GameStates.gameOver;
+        Time.timeScale = 0f;
     }
 
     public void DisplayWinScreen()

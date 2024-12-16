@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class PostProcessing : MonoBehaviour
 
@@ -26,15 +27,25 @@ public class PostProcessing : MonoBehaviour
         volume.profile.TryGet<LensDistortion>(out lensDistortion);
         volume.profile.TryGet<ChromaticAberration>(out chromaticAbberation);
         volume.profile.TryGet<Bloom>(out bloom);
-        if (lensDistortion && chromaticAbberation && bloom)
+
+        if (SceneManager.GetActiveScene().name == "Level_1")
         {
-            lensDistortion.active = false;
-            chromaticAbberation.active = false;
-            bloom.active = false;
+
+
+            if (lensDistortion && chromaticAbberation && bloom)
+            {
+                lensDistortion.active = false;
+                chromaticAbberation.active = false;
+                bloom.active = false;
+            }
+            lensDistortionIntensity = 0;
+            chromaticAbberationIntensity = 0;
+            bloomIntensity = 0;
         }
-        lensDistortionIntensity = 0;
-        chromaticAbberationIntensity = 0;
-        bloomIntensity = 0;
+
+
+
+
     }
 
     void Update()
@@ -105,7 +116,8 @@ public class PostProcessing : MonoBehaviour
         else if (effectTimer > 8f)
         {
             effectTimer = 0f;
-            bloom.active = false;
+            if (SceneManager.GetActiveScene().name == "Level_1")
+            { bloom.active = false; }
         }
 
     }

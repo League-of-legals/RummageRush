@@ -44,7 +44,9 @@ public class LevelManager : MonoBehaviour
         
 
         if (SceneManager.GetActiveScene().name == "Level_1")
-        {   
+        {
+            gameSettings.currentLevel = LevelStates.level1;
+
             if (gameSettings.previousGameState == GameStates.inMainMenu)
             {
                 hudManager.DisplayTutorial();
@@ -65,10 +67,14 @@ public class LevelManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "Level_2")
         {
-            gameSettings.ResetMoney();
-            gameSettings.ResetDamageDealt();
-            gameSettings.enemiesSpawned = 7;
-            gameSettings.enemiesDestroyed = 0;
+            if (gameSettings.previousLevel == LevelStates.level1 &&
+                gameSettings.previousGameState == GameStates.win)
+            {
+                gameSettings.ResetMoney();
+                gameSettings.ResetDamageDealt();
+                gameSettings.enemiesSpawned = 7;
+                gameSettings.enemiesDestroyed = 0;
+            }
         }
     }
 

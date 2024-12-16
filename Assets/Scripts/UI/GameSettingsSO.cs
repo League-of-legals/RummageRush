@@ -9,6 +9,8 @@ public class GameSettingsSO : ScriptableObject
 {
     [SerializeField] public GameStates currentGameState;
     [SerializeField] public GameStates previousGameState;
+    [SerializeField] public LevelStates currentLevel;
+    [SerializeField] public LevelStates previousLevel;
 
     public float money = 45f;
 

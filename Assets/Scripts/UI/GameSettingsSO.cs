@@ -11,6 +11,7 @@ public class GameSettingsSO : ScriptableObject
     [SerializeField] public GameStates previousGameState;
     [SerializeField] public LevelStates currentLevel;
     [SerializeField] public LevelStates previousLevel;
+    [SerializeField] public bool firstTimePlaying;
 
     public float money = 45f;
 
@@ -30,7 +31,7 @@ public class GameSettingsSO : ScriptableObject
     {
         currentGameState = GameStates.inMainMenu;
         previousGameState = currentGameState;
-        enemiesSpawned = 7;
+        enemiesSpawned = 11;
         enemiesDestroyed = 0;
     }
 
@@ -39,7 +40,7 @@ public class GameSettingsSO : ScriptableObject
 
     public void ResetMoney()
     {
-        money = 60f;
+        money = 45f;
     }
 
     public void ResetDamageDealt()

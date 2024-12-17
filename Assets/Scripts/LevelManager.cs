@@ -13,12 +13,15 @@ public class LevelManager : MonoBehaviour
     [SerializeField] RandomEvent randomEvent;
     [SerializeField] EnemySpawner enemySpawner;
     [SerializeField] TowerSpawner towerSpawner;
+    [SerializeField] TutorialLevel1 tutorialPanel; 
 
 
     [SerializeField] Homebase homebase;
 
     [SerializeField] float randomEventTimer;
     [SerializeField] public float randomEventDuration = 8f;
+
+    private bool runCourutineOnce = true;
 
     //[SerializeField] Tower towerDefault;
     //[SerializeField] Tower towerFast;
@@ -38,43 +41,59 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
-        gameSettings.currentGameState = GameStates.inGame;
-        Time.timeScale = 1f;
+        //gameSettings.currentGameState = GameStates.inGame;
+        //Time.timeScale = 1f;
 
         
 
+        
+    }
+
+    private void Start()
+
+    {
         if (SceneManager.GetActiveScene().name == "Level_1")
         {
+            runCourutineOnce = true;
             gameSettings.currentLevel = LevelStates.level1;
 
             if (gameSettings.previousGameState == GameStates.inMainMenu)
             {
+                tutorialPanel.currentTutorialScreen = 1;
                 hudManager.DisplayTutorial();
                 gameSettings.currentGameState = GameStates.inTutorial;
                 Time.timeScale = 0f;
+                gameSettings.firstTimePlaying = true;
             }
             //gameSettings.currentGameState = GameStates.inGame;
-            //Time.timeScale = 1f;
+
+            tutorialPanel.GetScreen14();
             gameSettings.ResetMoney();
             gameSettings.ResetDamageDealt();
-            gameSettings.enemiesSpawned = 7;
+            gameSettings.enemiesSpawned = 11;
             gameSettings.enemiesDestroyed = 0;
+            //Time.timeScale = 1f;
 
         }
-    }
-
-    private void Start()
-    {
-        if (SceneManager.GetActiveScene().name == "Level_2")
+        if (SceneManager.GetActiveScene().name == "Level_2") 
         {
-            if (gameSettings.previousLevel == LevelStates.level1 &&
-                gameSettings.previousGameState == GameStates.win)
+            gameSettings.currentLevel = LevelStates.level2;
+
+            if (gameSettings.previousGameState == GameStates.win && gameSettings.firstTimePlaying == true)
             {
-                gameSettings.ResetMoney();
-                gameSettings.ResetDamageDealt();
-                gameSettings.enemiesSpawned = 7;
-                gameSettings.enemiesDestroyed = 0;
+                
+                hudManager.DisplayTutorial();
+                gameSettings.firstTimePlaying = false;
+                gameSettings.currentGameState = GameStates.inTutorial;
+                Time.timeScale = 0f;
+
             }
+
+            gameSettings.ResetMoney();
+            gameSettings.ResetDamageDealt();
+            gameSettings.enemiesSpawned = 11;
+            gameSettings.enemiesDestroyed = 0;
+
         }
     }
 
@@ -82,6 +101,29 @@ public class LevelManager : MonoBehaviour
     private void Update()
     {
                
+
+        if (gameSettings.enemiesDestroyed == 4 && gameSettings.currentLevel == LevelStates.level1 && runCourutineOnce)
+        {   
+            runCourutineOnce = false;
+            tutorialPanel.GetScreen14();
+            hudManager.DisplayTutorial();
+            gameSettings.currentGameState = GameStates.inTutorial;
+            Time.timeScale = 0f;
+            gameSettings.money += 60;
+            hudManager.UpdateMoneyText();
+             
+            if (Input.GetMouseButtonUp(0))
+                {                  
+                        gameSettings.previousGameState = gameSettings.currentGameState;
+                        hudManager.HideTutorial();
+                        eventManager.ResumeGame();
+                        gameSettings.currentGameState = GameStates.inGame;
+                        Time.timeScale = 1f;
+                    
+                }
+            
+            StartCoroutine(enemySpawner.Wave02());
+        }
 
         if (gameSettings.enemiesDestroyed == gameSettings.enemiesSpawned)
         {

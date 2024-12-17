@@ -43,6 +43,8 @@ public class HUDmanager : MonoBehaviour
 
     [SerializeField] AudioScript audioScript;
 
+    
+
     private void Start()
     {
         UpdateMoneyText();
@@ -58,7 +60,7 @@ public class HUDmanager : MonoBehaviour
         audioScript.audioSource.Play();
         Debug.Log($"{tutorialPanel.screens.Length}");
         tutorialPanel.currentTutorialScreen = 1;
-
+        
 
     }
 
@@ -87,28 +89,56 @@ public class HUDmanager : MonoBehaviour
         }
 
         if(tutorialScreen.activeInHierarchy == true)
-        {
-            if(Input.GetMouseButtonUp(0))
+
+            if (tutorialPanel.currentTutorialScreen < tutorialPanel.screens.Length && tutorialPanel.currentTutorialScreen >0)  
             {
-                tutorialPanel.CycleThroughTutorialScreens();
-                if (tutorialPanel.currentTutorialScreen >= tutorialPanel.screens.Length)
-                {
+                    if (Input.GetMouseButtonUp(0))
+                    {
+                        tutorialPanel.CycleThroughTutorialScreens();
+                        if (tutorialPanel.currentTutorialScreen >= tutorialPanel.screens.Length)
+                        {
+                        tutorialPanel.currentTutorialScreen = 0;
+                            Debug.Log("closing tutorial");
+                            gameSettings.previousGameState = gameSettings.currentGameState;
+                            HideTutorial();
+                            eventManager.ResumeGame();
+                            gameSettings.currentGameState = GameStates.inGame;
+                            Time.timeScale = 1f;
+                    
+
+
+                        }
+                    }
+            }
+
+            else if (tutorialPanel.currentTutorialScreen == 0)
+                 {
+                     if (Input.GetMouseButtonUp(0))
+                        {
+                    Debug.Log("closing tutorial");
                     gameSettings.previousGameState = gameSettings.currentGameState;
                     HideTutorial();
                     eventManager.ResumeGame();
                     gameSettings.currentGameState = GameStates.inGame;
                     Time.timeScale = 1f;
-                }
-            }
-        }
-        
+
+                        }
+
+
+                 }
+
+
+
+
     }
 
 
     private void OnEnable()
     {
         buttonPause.onClick.AddListener(() => {
-            eventManager.PauseGame();
+            //eventManager.PauseGame();
+            Debug.Log("pausing");
+            DisplayPauseScreen();
             gameSettings.currentGameState = GameStates.paused;
             Time.timeScale = 0f;
         });
@@ -166,6 +196,7 @@ public class HUDmanager : MonoBehaviour
         eventManager.onResumeGame += HidePauseScreen;
         eventManager.onEnemyDestroyed += UpdateMoneyText;
         eventManager.onRandomEvent += ShowRandomEventScreen;
+        SceneManager.activeSceneChanged += StartLevel2;
 
 
 
@@ -222,18 +253,29 @@ public class HUDmanager : MonoBehaviour
         winScreen.SetActive(true);
         gameSettings.currentGameState = GameStates.win;
         Time.timeScale = 0f;
+        gameSettings.previousLevel = gameSettings.currentLevel;
+    }
+
+    public void HideWinScreen()
+    {
+        //gameSettings.previousGameState = gameSettings.currentGameState;
+        winScreen.SetActive(false);
+        //gameSettings.currentGameState = GameStates.inGame;
+        Time.timeScale = 1f;
     }
 
     public void DisplayTutorial()
     {
         gameSettings.previousGameState = GameStates.inMainMenu;
-        tutorialScreen.SetActive(true);
+        Time.timeScale = 0f;
+        tutorialScreen.SetActive(true);        
         gameSettings.currentGameState = GameStates.inTutorial;
     }
 
     public void HideTutorial()
     {
         tutorialScreen.SetActive(false);
+        Time.timeScale = 1f;
 
     }
 
@@ -274,6 +316,25 @@ public class HUDmanager : MonoBehaviour
     public void HideRandomEventScreen()
     {
         randomEventScreen.SetActive(false);
+    }
+
+    public void StartLevel2(Scene arg0, Scene arg1)
+    {
+        gameSettings.currentLevel = LevelStates.level2;
+
+        if (gameSettings.previousLevel == LevelStates.level1 &&
+            gameSettings.previousGameState == GameStates.win)
+        {
+            DisplayTutorial();
+            gameSettings.currentGameState = GameStates.inTutorial;
+            Time.timeScale = 0f;
+
+        }
+
+        gameSettings.ResetMoney();
+        gameSettings.ResetDamageDealt();
+        gameSettings.enemiesSpawned = 7;
+        gameSettings.enemiesDestroyed = 0;
     }
 }
 

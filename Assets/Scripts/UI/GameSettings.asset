@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff8a7aee229ac6a43b77c11efdc2749b, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  currentGameState: 1
-  previousGameState: 4
+  currentGameState: 4
+  previousGameState: 0
+  currentLevel: 0
+  previousLevel: 0
+  firstTimePlaying: 1
   money: 45
   damageDealt: 0
   enemiesSpawned: 7

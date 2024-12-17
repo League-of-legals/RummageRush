@@ -34,8 +34,8 @@ public class LooterRaccoonSpawner : MonoBehaviour
 
     private void SpawnLooter() //spawn a Looter Raccoon on given conditions
     {
-        if (gameSettings.currentGameState == GameStates.inGame)
-        { if (LootersInScene.Count == 0f)
+       
+         if (LootersInScene.Count == 0f)
             { gameSettings.looterCurrentPrice = 0; }
                
 
@@ -62,7 +62,7 @@ public class LooterRaccoonSpawner : MonoBehaviour
 
             }
         }
-    }
+    
 
     private void Start()
     {

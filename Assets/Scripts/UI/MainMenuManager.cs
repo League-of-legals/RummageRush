@@ -11,6 +11,12 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] GameObject controlsScreen;
 
 
+    private void Start()
+    {
+        gameSettings.currentGameState = GameStates.inMainMenu;
+       
+    }
+
     private void Update()
     {
         if (creditsScreen.activeInHierarchy || controlsScreen.activeInHierarchy)

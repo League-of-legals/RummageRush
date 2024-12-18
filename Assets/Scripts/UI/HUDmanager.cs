@@ -59,7 +59,7 @@ public class HUDmanager : MonoBehaviour
         towerHeavyCost.text = $"x{towerHeavy.towerCost}";
         audioScript.audioSource.Play();
         Debug.Log($"{tutorialPanel.screens.Length}");
-        tutorialPanel.currentTutorialScreen = 1;
+        //tutorialPanel.currentTutorialScreen = 1;
         
 
     }
@@ -90,21 +90,21 @@ public class HUDmanager : MonoBehaviour
 
         if(tutorialScreen.activeInHierarchy == true)
 
-            if (tutorialPanel.currentTutorialScreen < tutorialPanel.screens.Length && tutorialPanel.currentTutorialScreen >0)  
+            if (tutorialPanel.currentTutorialScreen < tutorialPanel.screens.Length && tutorialPanel.currentTutorialScreen > 0)  
             {
                     if (Input.GetMouseButtonUp(0))
                     {
                         tutorialPanel.CycleThroughTutorialScreens();
                         if (tutorialPanel.currentTutorialScreen >= tutorialPanel.screens.Length)
                         {
-                        tutorialPanel.currentTutorialScreen = 0;
+                        
                             Debug.Log("closing tutorial");
                             gameSettings.previousGameState = gameSettings.currentGameState;
                             HideTutorial();
                             eventManager.ResumeGame();
                             gameSettings.currentGameState = GameStates.inGame;
                             Time.timeScale = 1f;
-                    
+                            tutorialPanel.currentTutorialScreen = 0;
 
 
                         }
@@ -115,12 +115,12 @@ public class HUDmanager : MonoBehaviour
                  {
                      if (Input.GetMouseButtonUp(0))
                         {
-                    Debug.Log("closing tutorial");
-                    gameSettings.previousGameState = gameSettings.currentGameState;
-                    HideTutorial();
-                    eventManager.ResumeGame();
-                    gameSettings.currentGameState = GameStates.inGame;
-                    Time.timeScale = 1f;
+                        Debug.Log("closing tutorial");
+                        gameSettings.previousGameState = gameSettings.currentGameState;
+                        HideTutorial();
+                        eventManager.ResumeGame();
+                        gameSettings.currentGameState = GameStates.inGame;
+                        Time.timeScale = 1f;
 
                         }
 
@@ -333,7 +333,7 @@ public class HUDmanager : MonoBehaviour
 
         gameSettings.ResetMoney();
         gameSettings.ResetDamageDealt();
-        gameSettings.enemiesSpawned = 7;
+        gameSettings.enemiesSpawned = 8;
         gameSettings.enemiesDestroyed = 0;
     }
 }

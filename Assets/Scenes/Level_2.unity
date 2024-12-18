@@ -6135,7 +6135,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: cf73480221e69ff42a1e0bad593b75b4, type: 3}
   - {fileID: 21300000, guid: 1f86b38e431b1db4e93d84757bc484fc, type: 3}
   - {fileID: 21300000, guid: 1f86b38e431b1db4e93d84757bc484fc, type: 3}
-  screen14: {fileID: 0}
+  screen14:
+  - {fileID: 0}
   currentTutorialScreen: 0
   image: {fileID: 0}
 --- !u!114 &464404930
@@ -7479,7 +7480,7 @@ MonoBehaviour:
   randomEvent: {fileID: 2113143995}
   enemySpawner: {fileID: 1665862329}
   towerSpawner: {fileID: 917219770}
-  tutorialPanel: {fileID: 0}
+  tutorialPanel: {fileID: 464404929}
   homebase: {fileID: 1492229688}
   randomEventTimer: 0
   randomEventDuration: 8

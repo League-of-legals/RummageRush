@@ -62,8 +62,6 @@ public class EnemySpawner : MonoBehaviour
         yield return new WaitForSeconds(2);
         SpawnEnemy(enemyDefault, paths[(int)Random.Range(0, paths.Count)]);
 
-        yield return new WaitForSeconds(2);
-        SpawnEnemy(enemyDefault, paths[(int)Random.Range(0, paths.Count)]);
     }
 
 
@@ -87,16 +85,10 @@ public class EnemySpawner : MonoBehaviour
         SpawnEnemy(enemyFast, paths[(int)Random.Range(0, paths.Count)]);      
 
         yield return new WaitForSeconds(0.5f); 
-        SpawnEnemy(enemyDefault, paths[(int)Random.Range(0, paths.Count)]);   
-
-        yield return new WaitForSeconds(2);     
-        SpawnEnemy(enemyDefault, paths[(int)Random.Range(0, paths.Count)]);   
+        SpawnEnemy(enemyDefault, paths[(int)Random.Range(0, paths.Count)]);     
 
         yield return new WaitForSeconds(4);     
-        SpawnEnemy(enemyHeavy, paths[(int)Random.Range(0, paths.Count)]);    
-
-        yield return new WaitForSeconds(2);     
-        SpawnEnemy(enemyHeavy, paths[(int)Random.Range(0, paths.Count)]);     
+        SpawnEnemy(enemyHeavy, paths[(int)Random.Range(0, paths.Count)]);       
 
     }
 

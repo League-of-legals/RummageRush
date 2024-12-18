@@ -11677,9 +11677,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 164cc4d8ee53c8a42b59e3a0b4e627c9, type: 3}
   - {fileID: 21300000, guid: 0990903e788931746b350895177e3854, type: 3}
   - {fileID: 21300000, guid: 0990903e788931746b350895177e3854, type: 3}
-  screen14: {fileID: 21300000, guid: 1af639e4cbcc9f9488ea7c5e895773f9, type: 3}
+  screen14:
+  - {fileID: 21300000, guid: 1af639e4cbcc9f9488ea7c5e895773f9, type: 3}
   currentTutorialScreen: 0
-  image: {fileID: 0}
+  image: {fileID: 1456750067}
 --- !u!1 &1462919452
 GameObject:
   m_ObjectHideFlags: 0

@@ -65,23 +65,43 @@ public class LevelManager : MonoBehaviour
                 Time.timeScale = 0f;
                 gameSettings.firstTimePlaying = true;
             }
+            else
+            {
+                tutorialPanel.currentTutorialScreen = 0;
+                Time.timeScale = 1f;
+            }
+            
             //gameSettings.currentGameState = GameStates.inGame;
 
-            tutorialPanel.GetScreen14();
+                     
             gameSettings.ResetMoney();
             gameSettings.ResetDamageDealt();
-            gameSettings.enemiesSpawned = 11;
+            gameSettings.enemiesSpawned = 8;
             gameSettings.enemiesDestroyed = 0;
+            
+            tutorialPanel.GetScreen14(0);
+            
+
+            //if (!gameSettings.firstTimePlaying)
+            //{
+            //    tutorialPanel.currentTutorialScreen = 0;
+            //}
             //Time.timeScale = 1f;
 
         }
         if (SceneManager.GetActiveScene().name == "Level_2") 
         {
+            gameSettings.previousGameState = gameSettings.currentGameState;
+            gameSettings.currentGameState = GameStates.inGame;
+
             gameSettings.currentLevel = LevelStates.level2;
+            runCourutineOnce = true;
+            Time.timeScale = 1f;
+
 
             if (gameSettings.previousGameState == GameStates.win && gameSettings.firstTimePlaying == true)
             {
-                
+                tutorialPanel.currentTutorialScreen = 1;
                 hudManager.DisplayTutorial();
                 gameSettings.firstTimePlaying = false;
                 gameSettings.currentGameState = GameStates.inTutorial;
@@ -91,7 +111,7 @@ public class LevelManager : MonoBehaviour
 
             gameSettings.ResetMoney();
             gameSettings.ResetDamageDealt();
-            gameSettings.enemiesSpawned = 11;
+            gameSettings.enemiesSpawned = 8;
             gameSettings.enemiesDestroyed = 0;
 
         }
@@ -102,10 +122,10 @@ public class LevelManager : MonoBehaviour
     {
                
 
-        if (gameSettings.enemiesDestroyed == 4 && gameSettings.currentLevel == LevelStates.level1 && runCourutineOnce)
+        if (gameSettings.enemiesDestroyed == 3 && gameSettings.currentLevel == LevelStates.level1 && runCourutineOnce)
         {   
             runCourutineOnce = false;
-            tutorialPanel.GetScreen14();
+            tutorialPanel.image.sprite = tutorialPanel.GetScreen14(0);
             hudManager.DisplayTutorial();
             gameSettings.currentGameState = GameStates.inTutorial;
             Time.timeScale = 0f;
@@ -125,10 +145,17 @@ public class LevelManager : MonoBehaviour
             StartCoroutine(enemySpawner.Wave02());
         }
 
+        if (gameSettings.enemiesDestroyed == 3 && gameSettings.currentLevel == LevelStates.level2 && runCourutineOnce)
+        {
+            runCourutineOnce = false;
+            StartCoroutine(enemySpawner.Wave02());
+        }
+
+
         if (gameSettings.enemiesDestroyed == gameSettings.enemiesSpawned)
         {
             eventManager.Win();
-        }
+                    }
 
 
         /*if (gameSettings.currentGameState== GameStates.inTutorial)

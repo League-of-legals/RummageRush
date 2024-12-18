@@ -31,7 +31,7 @@ public class GameSettingsSO : ScriptableObject
     {
         currentGameState = GameStates.inMainMenu;
         previousGameState = currentGameState;
-        enemiesSpawned = 11;
+        enemiesSpawned = 8;
         enemiesDestroyed = 0;
     }
 

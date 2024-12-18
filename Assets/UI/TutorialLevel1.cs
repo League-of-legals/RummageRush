@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class TutorialLevel1 : MonoBehaviour
 {
     [SerializeField] public Sprite[] screens;
-    [SerializeField] public Sprite screen14;
+    [SerializeField] public Sprite[] screen14;
     [SerializeField] public int currentTutorialScreen;
     public Image image;
 
@@ -24,10 +24,11 @@ public class TutorialLevel1 : MonoBehaviour
         return screens[incomingIndex];
     }
 
-    public void GetScreen14()
+    public Sprite GetScreen14(int incomingIndex)
     {
-        image.sprite = screen14;
+        return screen14[incomingIndex];
     }
+
 
 
 

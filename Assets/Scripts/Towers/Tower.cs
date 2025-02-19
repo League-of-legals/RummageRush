@@ -123,11 +123,6 @@ public class Tower : MonoBehaviour
 
                     }
                 }
-
-
-
-
-
             }
         }
     }

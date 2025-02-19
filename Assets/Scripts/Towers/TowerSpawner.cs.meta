@@ -3,7 +3,21 @@ guid: dcb61afa95000a049a1c0be8957d7854
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - towerDefault: {instanceID: 0}
+  - towerHeavy: {instanceID: 0}
+  - towerFast: {instanceID: 0}
+  - tilemap: {instanceID: 0}
+  - gameSettings: {instanceID: 0}
+  - hudManager: {instanceID: 0}
+  - status: {instanceID: 0}
+  - button1: {instanceID: 0}
+  - button2: {instanceID: 0}
+  - button3: {instanceID: 0}
+  - TowerPlacingEffect: {fileID: 1166619572000372868, guid: 973df088a6ac2ab4588bbde5e3600e85,
+      type: 3}
+  - placementZoneEffect: {fileID: 1166619572000372868, guid: 973df088a6ac2ab4588bbde5e3600e85,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

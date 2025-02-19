@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,25 +7,20 @@ using UnityEngine.UI;
 
 public class TowerSpawner : MonoBehaviour
 {
-
     [Header("Settings:")]
     [SerializeField] LayerMask groundLayers;
     private Tower towerIndicator;
 
     [Header("Towers user can buy:")]
-    // Types of towers
     [SerializeField] Tower towerDefault;
     [SerializeField] Tower towerHeavy;
     [SerializeField] Tower towerFast;
 
-    // grid related
     [Header("Grid:")]
     [SerializeField] Tilemap tilemap;
     private Vector3Int cellPosition;
 
-
     private bool spawnerIsActive;
-
     private Vector3 mousePosition;
 
     [Header("References:")]
@@ -33,183 +28,179 @@ public class TowerSpawner : MonoBehaviour
     [SerializeField] HUDmanager hudManager;
     [SerializeField] TMP_Text status;
 
-    //buttons
     [Header("Buttons:")]
     [SerializeField] Button button1;
     [SerializeField] Button button2;
     [SerializeField] Button button3;
 
-    //towers spawned list
     [Header("List of towers:")]
     [SerializeField] public List<Tower> towersInScene;
-    //public bool towersInScene = false;
+
+    [Header("Placing Effect:")]
+    [SerializeField] private GameObject TowerPlacingEffect;
+
+    [Header("Placement Zone:")]
+    [SerializeField] private GameObject placementZoneEffect;
+    [SerializeField] private float gridSize = 1f; // Grid size for snapping
 
     private void Awake()
     {
-        // Intial setup
         spawnerIsActive = false;
         towerIndicator = null;
-    }
 
-    private void Start()
-    {
+        if (placementZoneEffect != null)
+        {
+            placementZoneEffect.SetActive(false); // Hide zone at start
+        }
 
     }
 
     private void Update()
     {
         if (gameSettings.currentGameState == GameStates.inGame)
-        {         
-
-            // create a tower with a button press
-            if (Input.GetKeyUp(KeyCode.Alpha1) && !spawnerIsActive && gameSettings.money >= towerDefault.towerCost)
-            {
-                StartTowerPlacement(towerDefault);
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha2) && !spawnerIsActive && gameSettings.money >= towerFast.towerCost)
-            {
-                StartTowerPlacement(towerFast);
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha3) && !spawnerIsActive && gameSettings.money >= towerHeavy.towerCost)
-            {
-                StartTowerPlacement(towerHeavy);
-            }
-
-            if (Input.GetKeyUp(KeyCode.Alpha1) && !spawnerIsActive && gameSettings.money <= towerDefault.towerCost)
-            {
-                Debug.Log($"Not enough money!");
-                StartCoroutine(StatusUpdate());
-            }
-
-            if (Input.GetKeyUp(KeyCode.Alpha2) && !spawnerIsActive && gameSettings.money <= towerFast.towerCost)
-            {
-                Debug.Log($"Not enough money!");
-                StartCoroutine(StatusUpdate());
-            }
-
-            if (Input.GetKeyUp(KeyCode.Alpha3) && !spawnerIsActive && gameSettings.money <= towerHeavy.towerCost)
-            {
-                Debug.Log($"Not enough money!");
-                StartCoroutine(StatusUpdate());
-            }
-
-
-            // place the tower
-            if (spawnerIsActive)
-            {
-
-                if (hudManager.randomEventScreen.activeInHierarchy == false)
-                {
-                    towerIndicator.transform.position = GetMousePosition();
-
-                    // drop the tower
-                    if (Input.GetMouseButton(0))
-                    {
-                        towerIndicator.activateTower();
-                        towersInScene.Add(towerIndicator);
-                        towerIndicator = null;
-                        spawnerIsActive = false;
-                    }
-
-                    // cancel placement
-                    else if (Input.GetMouseButton(1))
-                    {
-                        gameSettings.money += towerIndicator.towerCost;
-                        hudManager.UpdateMoneyText();
-                        Destroy(towerIndicator.gameObject);
-                        spawnerIsActive = false;
-                    }
-                }
-                else
-                {
-                    gameSettings.money += towerIndicator.towerCost;
-                    hudManager.UpdateMoneyText();
-                    Destroy(towerIndicator.gameObject);
-                    spawnerIsActive = false;
-                }
-
-
-            }
-
-            //if (towers.Count > 0)
-            //{
-            //    towersInScene = true;
-            //}
-            //else
-            //{
-            //    towersInScene = false;
-            //}
-
+        {
+            HandleTowerPlacement();
         }
 
     }
 
+    private void HandleTowerPlacement()
+    {
+        if (spawnerIsActive)
+        {
+            if (!hudManager.randomEventScreen.activeInHierarchy)
+            {
+                Vector3 newPosition = GetMousePosition();
+                newPosition = SnapToGrid(newPosition);
+
+                towerIndicator.transform.position = newPosition;
+
+                if (placementZoneEffect != null)
+                {
+                    placementZoneEffect.SetActive(true);
+                   
+                }
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    towerIndicator.activateTower();
+                    towersInScene.Add(towerIndicator);
+                    towerIndicator = null;
+                    spawnerIsActive = false;
+                    placementZoneEffect.SetActive(false);
+                    TowerPlacingEffect.SetActive(false);
+                }
+                else if (Input.GetMouseButtonDown(1))
+                {
+                    CancelTowerPlacement();
+                }
+            }
+            else
+            {
+                CancelTowerPlacement();
+            }
+        }
+    }
+
+    private void CancelTowerPlacement()
+    {
+        gameSettings.money += towerIndicator.towerCost;
+        hudManager.UpdateMoneyText();
+        Destroy(towerIndicator.gameObject);
+        spawnerIsActive = false;
+        placementZoneEffect.SetActive(false);
+        TowerPlacingEffect.SetActive(false);
+    }
+
     private void OnEnable()
     {
-        button1.onClick.AddListener(delegate { StartTowerPlacement(towerDefault); });
-        button2.onClick.AddListener(delegate { StartTowerPlacement(towerFast); });
-        button3.onClick.AddListener(delegate { StartTowerPlacement(towerHeavy); });
+        button1.onClick.AddListener(() => StartTowerPlacement(towerDefault));
+        button2.onClick.AddListener(() => StartTowerPlacement(towerFast));
+        button3.onClick.AddListener(() => StartTowerPlacement(towerHeavy));
     }
+
     private void OnDisable()
     {
-        button1.onClick.RemoveListener(delegate { StartTowerPlacement(towerDefault); });
-        button2.onClick.RemoveListener(delegate { StartTowerPlacement(towerFast); });
-        button3.onClick.RemoveListener(delegate { StartTowerPlacement(towerHeavy); });
+        button1.onClick.RemoveListener(() => StartTowerPlacement(towerDefault));
+        button2.onClick.RemoveListener(() => StartTowerPlacement(towerFast));
+        button3.onClick.RemoveListener(() => StartTowerPlacement(towerHeavy));
     }
 
     private Vector3 GetMousePosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        // Fire the 'laser' 
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, 200f, groundLayers))
+
+        if (Physics.Raycast(ray, out hit, 200f, groundLayers))
         {
+            Debug.DrawLine(Camera.main.transform.position, hit.point, Color.red);
 
-            // We hit something! Yippee!
-            Debug.DrawLine(Camera.main.transform.position, hit.point,
-                Color.red);
+            Vector3 worldPosition = SnapToGrid(hit.point);
 
-            // convert hit point to a position on the grid
-            cellPosition = tilemap.LocalToCell(hit.point);
+            if (TowerPlacingEffect != null)
+            {
+                TowerPlacingEffect.SetActive(true);
+            }
 
-            return new Vector3(
-                cellPosition.x + tilemap.cellSize.x / 2f,    // x
-                0,                                           // y
-                cellPosition.y + tilemap.cellSize.y / 2f    // z
-               );
+            if (placementZoneEffect != null)
+            {
+                placementZoneEffect.SetActive(true);
+            }
 
+            return worldPosition;
+        }
+
+        if (TowerPlacingEffect != null)
+        {
+            TowerPlacingEffect.SetActive(false);
+        }
+
+        if (placementZoneEffect != null)
+        {
+            placementZoneEffect.SetActive(false);
         }
 
         return Vector3.zero;
-
     }
 
     private void StartTowerPlacement(Tower newTower)
     {
         if (!spawnerIsActive && gameSettings.money >= newTower.towerCost)
         {
-            Debug.Log($"Purchased tower");
+            Debug.Log("Purchased tower");
+            mousePosition = GetMousePosition();
+            mousePosition = SnapToGrid(mousePosition);
             towerIndicator = Instantiate(newTower, mousePosition, Quaternion.identity);
             towerIndicator.towerSpawner = this;
             spawnerIsActive = true;
             gameSettings.money -= newTower.towerCost;
             hudManager.UpdateMoneyText();
-        }
 
+            if (placementZoneEffect != null)
+            {
+                placementZoneEffect.SetActive(true);
+            }
+        }
         else
         {
-            Debug.Log($"Not enough money!");
+            Debug.Log("Not enough money!");
             StartCoroutine(StatusUpdate());
         }
-           
-    } 
+    }
 
     IEnumerator StatusUpdate()
     {
-        status.text = $"Not enough money!";
+        status.text = "Not enough money!";
         yield return new WaitForSeconds(3);
-        status.text = $" ";
+        status.text = "";
     }
+
+    private Vector3 SnapToGrid(Vector3 position)
+    {
+        float x = Mathf.Floor(position.x / gridSize) * gridSize + gridSize / 2f;
+        float z = Mathf.Floor(position.z / gridSize) * gridSize + gridSize / 2f;
+        return new Vector3(x, position.y, z);
+    }
+
 
 }

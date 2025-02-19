@@ -1,13 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
     [SerializeField] GameSettingsSO gameSettings;
-
   
     public void LoadMenuScene()
     {
@@ -16,25 +12,15 @@ public class MenuManager : MonoBehaviour
         gameSettings.currentGameState = GameStates.inMainMenu;
     }
 
-    public void LoadLevel1Scene()
+    public void RestartScene()
     {
-        gameSettings.previousGameState = gameSettings.currentGameState;
-        gameSettings.currentGameState = GameStates.inGame;
-        gameSettings.currentLevel = LevelStates.level1;
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Level_1");
-      
-
     }
-    public void LoadLevel2Scene()
+
+    public void LoadnextScene()
     {
-        gameSettings.previousLevel = gameSettings.currentLevel;
-        gameSettings.currentLevel= LevelStates.level2;
-        gameSettings.previousGameState = gameSettings.currentGameState;
-        //gameSettings.currentGameState = GameStates.inGame;
-        SceneManager.LoadScene("Level_2");
-
-
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
-
 }

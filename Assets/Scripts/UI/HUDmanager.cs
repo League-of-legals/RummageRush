@@ -307,16 +307,38 @@ public class HUDmanager : MonoBehaviour
 
     public void ShowRandomEventScreen()
     {
+        if (randomEventScreen == null)
+        {
+            Debug.LogError("RandomEventScreen is not assigned in HUDmanager!");
+            return;
+        }
+
         gameSettings.previousGameState = gameSettings.currentGameState;
         randomEventScreen.SetActive(true);
-        randomEvent.Randomize();
+
+        if (randomEvent != null)
+        {
+            randomEvent.Randomize();
+        }
+        else
+        {
+            Debug.LogError("RandomEvent script is not assigned in HUDmanager!");
+        }
+
         gameSettings.currentGameState = GameStates.inRandomEvent;
     }
 
     public void HideRandomEventScreen()
     {
+        if (randomEventScreen == null)
+        {
+            Debug.LogError("RandomEventScreen is not assigned in HUDmanager!");
+            return;
+        }
+
         randomEventScreen.SetActive(false);
     }
+
 
     public void StartLevel2(Scene arg0, Scene arg1)
     {

@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -14,6 +11,8 @@ public class RandomEvent : MonoBehaviour
     [SerializeField] TMP_Text randomItemName;
     [SerializeField] TMP_Text randomItemDescription;
     [SerializeField] GameObject panel;
+    [SerializeField] Button acceptButton;
+    [SerializeField] Button denyButton;
 
     [SerializeField] EventManagerSO eventManager;
     [SerializeField] LevelManager levelManager;
@@ -25,15 +24,20 @@ public class RandomEvent : MonoBehaviour
     private void OnEnable()
     {
         eventManager.onRandomEvent += Randomize;
+        acceptButton.onClick.AddListener(AcceptEvent);
+        denyButton.onClick.AddListener(DenyEvent);
     }
 
     private void OnDisable()
     {
         eventManager.onRandomEvent -= Randomize;
+        acceptButton.onClick.RemoveListener(AcceptEvent);
+        denyButton.onClick.RemoveListener(DenyEvent);
     }
+
     public void Randomize()
     {
-        Debug.Log($"randomizing...");
+        Debug.Log("randomizing...");
         randomIndex = Random.Range(0, randomItems.Count);
         item = randomItems[randomIndex];
         itemName = randomItemNames[randomIndex];
@@ -41,46 +45,32 @@ public class RandomEvent : MonoBehaviour
         panel.GetComponent<Image>().sprite = item;
         randomItemName.text = "a " + itemName;
 
-        if (itemName == "Banana peel")
+        string description = itemName switch
         {
-            randomItemDescription.text =
-                $"Slows down enemies for {levelManager.randomEventDuration} seconds!";
+            "Banana peel" => $"Slows down enemies for {levelManager.randomEventDuration} seconds!",
+            "Cardboard box" => $"Homebase is immune to damage for {levelManager.randomEventDuration} seconds!",
+            "Crushed can" => $"Raccoons shoot faster for {levelManager.randomEventDuration} seconds!",
+            "Lavalamp" => $"Raccoons are distracted and can't defend for {levelManager.randomEventDuration} seconds!",
+            "Moldy brownie" => $"Raccoons are sick and can't defend for {levelManager.randomEventDuration} seconds!",
+            "Plastic knife" => $"Enemies' maximum health is reduced for {levelManager.randomEventDuration} seconds!",
+            _ => ""
+        };
 
-        }
-
-        else if (itemName == "Cardboard box")
-        {
-            randomItemDescription.text =
-                $"Homebase is immune to damage for {levelManager.randomEventDuration} seconds!";
-        }
-
-        else if (itemName == "Crushed can")
-        {
-            randomItemDescription.text =
-                $"Raccoons shoot faster for {levelManager.randomEventDuration} seconds!";
-
-        }
-
-        else if (itemName == "Lavalamp")
-        {
-            randomItemDescription.text =
-                $"Raccoons are distracted and can't defend for {levelManager.randomEventDuration} seconds!";
-
-        }
-
-        else if (itemName == "Moldy brownie")
-        {
-            randomItemDescription.text =
-                $"Raccoons are sick and can't defend for {levelManager.randomEventDuration} seconds!";
-
-        }
-
-        else if (itemName == "Plastic knife")
-        {
-            randomItemDescription.text =
-                $"For {levelManager.randomEventDuration} seconds enemies' maximum health is reduced!";
-
-
-        }
+        randomItemDescription.text = description;
+        panel.SetActive(true);
     }
+
+    public void AcceptEvent()
+    {
+        Debug.Log($"Accepted event: {itemName}");
+        // Apply effects here
+        panel.SetActive(false);
+    }
+
+    public void DenyEvent()
+    {
+        Debug.Log($"Denied event: {itemName}");
+        panel.SetActive(false);
+    }
+
 }

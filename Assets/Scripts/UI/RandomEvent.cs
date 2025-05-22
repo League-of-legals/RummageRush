@@ -8,9 +8,15 @@ public class RandomEvent : MonoBehaviour
 {
     [SerializeField] List<Sprite> randomItems;
     [SerializeField] List<string> randomItemNames;
+
+    [Header("UI Panels")]
+    [SerializeField] GameObject offerPanel;
+    [SerializeField] GameObject itemRevealPanel;
+
+    [Header("UI Elements")]
+    [SerializeField] Image showItemImage;
     [SerializeField] TMP_Text randomItemName;
     [SerializeField] TMP_Text randomItemDescription;
-    [SerializeField] GameObject panel;
     [SerializeField] Button acceptButton;
     [SerializeField] Button denyButton;
 
@@ -21,29 +27,71 @@ public class RandomEvent : MonoBehaviour
     public Sprite item;
     public string itemName;
 
+    private void Start()
+    {
+        offerPanel.SetActive(false);
+        itemRevealPanel.SetActive(false);
+    }
+
     private void OnEnable()
     {
-        eventManager.onRandomEvent += Randomize;
-        acceptButton.onClick.AddListener(AcceptEvent);
-        denyButton.onClick.AddListener(DenyEvent);
+        eventManager.onRandomEvent += ShowOffer;
+        acceptButton.onClick.AddListener(OnAccept);
+        denyButton.onClick.AddListener(OnDeny);
     }
 
     private void OnDisable()
     {
-        eventManager.onRandomEvent -= Randomize;
-        acceptButton.onClick.RemoveListener(AcceptEvent);
-        denyButton.onClick.RemoveListener(DenyEvent);
+        eventManager.onRandomEvent -= ShowOffer;
+        acceptButton.onClick.RemoveListener(OnAccept);
+        denyButton.onClick.RemoveListener(OnDeny);
     }
 
-    public void Randomize()
+    public void ShowOffer()
     {
-        Debug.Log("randomizing...");
+        Debug.Log("Showing random item offer...");
+
+        if (randomItems.Count == 0 || randomItemNames.Count == 0)
+        {
+            Debug.LogError("Random items list is empty!");
+            return;
+        }
+
+        if (randomItems.Count != randomItemNames.Count)
+        {
+            Debug.LogError("randomItems and randomItemNames must be the same length!");
+            return;
+        }
+
         randomIndex = Random.Range(0, randomItems.Count);
         item = randomItems[randomIndex];
         itemName = randomItemNames[randomIndex];
 
-        panel.GetComponent<Image>().sprite = item;
-        randomItemName.text = "a " + itemName;
+        showItemImage.sprite = item;
+        offerPanel.SetActive(true);
+    }
+
+    private void OnAccept()
+    {
+        Debug.Log($"Accepted item: {itemName}");
+        offerPanel.SetActive(false);
+        ShowItemDescription();
+        itemRevealPanel.SetActive(true);
+    }
+
+    public void OnDeny()
+    {
+        Debug.Log($"Denied item: {itemName}");
+        item = null;
+        itemName = null;
+        offerPanel.SetActive(false);
+        itemRevealPanel.SetActive(false);
+        eventManager.ResumeGame(); // Resume gameplay
+    }
+
+    private void ShowItemDescription()
+    {
+        randomItemName.text = itemName;
 
         string description = itemName switch
         {
@@ -53,24 +101,15 @@ public class RandomEvent : MonoBehaviour
             "Lavalamp" => $"Raccoons are distracted and can't defend for {levelManager.randomEventDuration} seconds!",
             "Moldy brownie" => $"Raccoons are sick and can't defend for {levelManager.randomEventDuration} seconds!",
             "Plastic knife" => $"Enemies' maximum health is reduced for {levelManager.randomEventDuration} seconds!",
-            _ => ""
+            _ => "No description available."
         };
 
         randomItemDescription.text = description;
-        panel.SetActive(true);
     }
 
-    public void AcceptEvent()
+    public void OnContinueAfterAccept()
     {
-        Debug.Log($"Accepted event: {itemName}");
-        // Apply effects here
-        panel.SetActive(false);
+        itemRevealPanel.SetActive(false);
+        eventManager.ResumeGame();
     }
-
-    public void DenyEvent()
-    {
-        Debug.Log($"Denied event: {itemName}");
-        panel.SetActive(false);
-    }
-
 }

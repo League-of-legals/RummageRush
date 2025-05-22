@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -318,7 +318,7 @@ public class HUDmanager : MonoBehaviour
 
         if (randomEvent != null)
         {
-            randomEvent.Randomize();
+            randomEvent.ShowOffer(); // Directly show the offer
         }
         else
         {

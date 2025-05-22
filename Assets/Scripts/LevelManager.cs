@@ -121,7 +121,7 @@ public class LevelManager : MonoBehaviour
     private void Update()
     {
                
-
+        Debug.Log(gameSettings.damageDealt);
         if (gameSettings.enemiesDestroyed == 3 && gameSettings.currentLevel == LevelStates.level1 && runCourutineOnce)
         {   
             runCourutineOnce = false;
@@ -218,7 +218,7 @@ public class LevelManager : MonoBehaviour
 
         else if (gameSettings.currentGameState == GameStates.inRandomEvent)
         {
-            if (Input.anyKeyDown)
+            if (Input.anyKeyDown && !randomEvent.offerPanel.gameObject.active)
             {
                 randomEventTimer = 0f;
                 gameSettings.previousGameState = gameSettings.currentGameState;

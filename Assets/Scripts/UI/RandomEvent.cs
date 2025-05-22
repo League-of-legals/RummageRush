@@ -10,8 +10,8 @@ public class RandomEvent : MonoBehaviour
     [SerializeField] List<string> randomItemNames;
 
     [Header("UI Panels")]
-    [SerializeField] GameObject offerPanel;
-    [SerializeField] GameObject itemRevealPanel;
+    [SerializeField] public GameObject offerPanel;
+    [SerializeField] public GameObject itemRevealPanel;
 
     [Header("UI Elements")]
     [SerializeField] Image showItemImage;
@@ -27,7 +27,7 @@ public class RandomEvent : MonoBehaviour
     public Sprite item;
     public string itemName;
 
-    private void Start()
+    private void Awake()
     {
         offerPanel.SetActive(false);
         itemRevealPanel.SetActive(false);
@@ -45,6 +45,7 @@ public class RandomEvent : MonoBehaviour
         eventManager.onRandomEvent -= ShowOffer;
         acceptButton.onClick.RemoveListener(OnAccept);
         denyButton.onClick.RemoveListener(OnDeny);
+        itemRevealPanel?.SetActive(false);
     }
 
     public void ShowOffer()
@@ -68,14 +69,16 @@ public class RandomEvent : MonoBehaviour
         itemName = randomItemNames[randomIndex];
 
         showItemImage.sprite = item;
-        offerPanel.SetActive(true);
+        Debug.Log(offerPanel);
+        offerPanel.gameObject.SetActive(true);
     }
 
-    private void OnAccept()
+    public void OnAccept()
     {
         Debug.Log($"Accepted item: {itemName}");
         offerPanel.SetActive(false);
         ShowItemDescription();
+        Debug.Log(itemRevealPanel);
         itemRevealPanel.SetActive(true);
     }
 
@@ -105,11 +108,5 @@ public class RandomEvent : MonoBehaviour
         };
 
         randomItemDescription.text = description;
-    }
-
-    public void OnContinueAfterAccept()
-    {
-        itemRevealPanel.SetActive(false);
-        eventManager.ResumeGame();
     }
 }
